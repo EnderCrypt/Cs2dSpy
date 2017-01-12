@@ -67,9 +67,7 @@ public class SpyPlayer
 		ip = source.read();
 		port = source.readInt();
 		ping = source.readInt();
-		//usgn = source.readInt();
-		source.readInt();
-		usgn = 138322;
+		usgn = source.readInt();
 		usgnInfo = usgnManager.get(usgn);
 		x = source.readDouble();
 		y = source.readDouble();
