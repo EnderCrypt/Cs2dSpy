@@ -50,10 +50,10 @@ public class SpyRealtime
 		ageMs = (int) (System.currentTimeMillis() - source.getAccessAge());
 	}
 
-	public Optional<SpyPlayer> getNearbyPlayer(Point point)
+	public Optional<SpyPlayer> getNearbyPlayer(Point point, double maxLength)
 	{
 		SpyPlayer spyPlayer = null;
-		double dist = 150.0;
+		double dist = maxLength;
 		for (SpyPlayer player : players)
 		{
 			double cDist = player.getPosition().distance(point.x, point.y);

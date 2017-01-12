@@ -139,7 +139,7 @@ public class Main
 			{
 				realtime.draw(g2d);
 				Point absoluteMousePosition = getAbsoluteMousePosition();
-				selectedPlayer = realtime.getNearbyPlayer(absoluteMousePosition);
+				selectedPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
 
 				g2d.setStroke(new BasicStroke(1));
 				g2d.setColor(Color.BLACK);
