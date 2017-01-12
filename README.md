@@ -1,6 +1,8 @@
 # Cs2dSpy
 ### Version 0.1
 
+public download: http://www.unrealsoftware.de/files_show.php?file=17266
+
 This is a program created by me, i made it for Cs2d Server owners, allowing them to view thats going on in server even if they arent in it
 
 Installation instructions:
@@ -13,12 +15,6 @@ Installation instructions:
 4. start the game server, either using the normal cs2d client or by using a dedicated server
 
 5. once the server has started, launch the jar (by double clicking, or right click open with > java)
-
-future versions will include
-- zooming
-- viewing full player list
-- setting file
-- more general data
 
 Sources & License included
 
