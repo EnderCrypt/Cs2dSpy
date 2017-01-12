@@ -37,7 +37,7 @@ public class SpyMap
 	public SpyMap(AccessSource source) throws IOException
 	{
 		// line 1
-		tileset = new Tileset(source.read());
+		tileset = new Tileset(System.getProperty("user.dir") + "/" + source.read());
 
 		// line 2
 		int mapWidth = source.readInt();

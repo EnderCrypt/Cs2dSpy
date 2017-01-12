@@ -105,7 +105,7 @@ public class Main
 				{
 					// ignore
 				}
-				catch (FileNotFoundException e)
+				catch (FileNotFoundException e) // caused when cs2d hasnt had time to write realtime data yet
 				{
 					// ignore
 				}

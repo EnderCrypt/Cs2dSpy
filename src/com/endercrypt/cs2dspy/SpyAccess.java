@@ -1,9 +1,7 @@
 package com.endercrypt.cs2dspy;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -30,7 +28,7 @@ public enum SpyAccess
 	REALTIME("Realtime");
 
 	private final static String extension = "link";
-	private final static String directory = "access/";
+	private final static String directory = System.getProperty("user.dir") + "/access/";
 
 	private String file;
 
@@ -44,10 +42,8 @@ public enum SpyAccess
 		return new File(directory + file + "." + extension);
 	}
 
-	@SuppressWarnings("resource") // closed outside, in try-with-resource (atleast thats the idea)
 	public AccessSource access() throws FileNotFoundException
 	{
-		File accessFile = getFile();
-		return new AccessSource(new BufferedReader(new FileReader(accessFile)), accessFile.lastModified());
+		return new AccessSource(getFile());
 	}
 }

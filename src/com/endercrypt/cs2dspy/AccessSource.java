@@ -2,6 +2,9 @@ package com.endercrypt.cs2dspy;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -27,10 +30,10 @@ public class AccessSource implements Closeable
 	private BufferedReader bufferedReader;
 	private long accessAge;
 
-	public AccessSource(BufferedReader bufferedReader, long accessAge)
+	public AccessSource(File accessFile) throws FileNotFoundException
 	{
-		this.bufferedReader = bufferedReader;
-		this.accessAge = accessAge;
+		this.bufferedReader = new BufferedReader(new FileReader(accessFile));
+		this.accessAge = accessFile.lastModified();
 	}
 
 	public long getAccessAge()
