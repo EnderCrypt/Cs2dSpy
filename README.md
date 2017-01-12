@@ -23,6 +23,7 @@ future versions will include
 Sources & License included
 
 Github: https://github.com/EnderCrypt/Cs2dSpy
+
 License:  GNU General Public License Version 3
 
 Tested on Mac OS and Windows 10
