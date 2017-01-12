@@ -81,7 +81,7 @@ public class Main
 		Keyboard keyboard = window.getKeyboard();
 		keyboard.bindKey(KeyEvent.VK_RIGHT, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.cycleNext(realtime));
 		keyboard.bindKey(KeyEvent.VK_LEFT, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.cyclePrev(realtime));
-		keyboard.bindKey(KeyEvent.VK_DOWN, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.stop());
+		keyboard.bindKey(KeyEvent.VK_SPACE, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.stop());
 
 		// create view and bind view-movement keys
 		Point mapCenter = map.getCenter();
