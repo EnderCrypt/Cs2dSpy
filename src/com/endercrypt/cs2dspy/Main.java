@@ -3,6 +3,7 @@ package com.endercrypt.cs2dspy;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -18,9 +19,7 @@ import javax.swing.JOptionPane;
 import com.endercrypt.cs2dspy.gui.AwtWindow;
 import com.endercrypt.cs2dspy.gui.SplashWindow;
 import com.endercrypt.cs2dspy.gui.View;
-import com.endercrypt.cs2dspy.gui.keyboard.AppKeyListener;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
-import com.endercrypt.cs2dspy.gui.keyboard.Keyboard.BindType;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
@@ -140,15 +139,24 @@ public class Main
 
 	private static class ApplicationGui implements AwtWindow.DrawListener
 	{
+		private Graphics2D g2d;
+		private Graphics2D hud;
+		private FontMetrics fontMetrics;
+		private Dimension screenSize;
+		private Optional<SpyPlayer> hoverPlayer = Optional.empty();
+		private Optional<SpyPlayer> spectPlayer = Optional.empty();
+
 		@Override
-		public void onDraw(Graphics2D g2d, Dimension screenSize)
+		public void onDraw(Graphics2D guiG2d, Dimension guiScreenSize)
 		{
-			Optional<SpyPlayer> hoverPlayer = Optional.empty();
-			Graphics2D hud = (Graphics2D) g2d.create();
+			g2d = guiG2d;
+			hud = (Graphics2D) g2d.create();
+			fontMetrics = g2d.getFontMetrics();
+			screenSize = guiScreenSize;
 
 			// spectate if enabled
-			Optional<SpyPlayer> specPlayer = spectate.get(realtime);
-			specPlayer.ifPresent((player) -> view.setPosition(player.getPosition()));
+			spectPlayer = spectate.get(realtime);
+			spectPlayer.ifPresent((player) -> view.setPosition(player.getPosition()));
 
 			// draw content
 			map.draw(g2d, view, screenSize);
@@ -156,7 +164,7 @@ public class Main
 			if (realtime != null)
 			{
 				realtime.draw(g2d);
-				Point absoluteMousePosition = getAbsoluteMousePosition(screenSize);
+				Point absoluteMousePosition = getAbsoluteMousePosition();
 				hoverPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
 
 				g2d.setStroke(new BasicStroke(1));
@@ -174,10 +182,10 @@ public class Main
 			}
 
 			// draw HUD
-			drawHud(hud, hoverPlayer, screenSize);
+			drawHud();
 		}
 
-		private static Point getAbsoluteMousePosition(Dimension screenSize)
+		private Point getAbsoluteMousePosition()
 		{
 			Point mousePosition = window.getMousePosition();
 			mousePosition.x -= screenSize.width / 2;
@@ -188,7 +196,7 @@ public class Main
 			return mousePosition;
 		}
 
-		private static void drawHud(Graphics2D hud, Optional<SpyPlayer> hoverPlayer, Dimension screenSize)
+		private void drawHud()
 		{
 			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, window.getMousePosition()));
 			if (realtime != null)
@@ -196,6 +204,21 @@ public class Main
 				hud.setColor(Color.WHITE);
 				realtime.drawHud(hud, screenSize);
 			}
+
+			Optional<SpyPlayer> specPlayer = spectate.get(realtime);
+			specPlayer.ifPresent(new Consumer<SpyPlayer>()
+			{
+				@Override
+				public void accept(SpyPlayer player)
+				{
+					String text = "Spectating (ID: " + player.getID() + ") " + player.getName();
+					Dimension textDimension = new Dimension(fontMetrics.stringWidth(text), fontMetrics.getHeight());
+					hud.setColor(new Color(255, 255, 255, 100));
+					hud.fillRect(screenSize.width - (textDimension.width + 10), 64, textDimension.width + 10, textDimension.height);
+					hud.setColor(Color.BLACK);
+					hud.drawString(text, screenSize.width - (textDimension.width + 5), 64 + fontMetrics.getAscent());
+				}
+			});
 		}
 	}
 }

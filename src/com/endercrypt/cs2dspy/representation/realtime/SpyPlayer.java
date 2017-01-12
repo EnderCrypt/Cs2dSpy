@@ -87,6 +87,11 @@ public class SpyPlayer
 		return id;
 	}
 
+	public String getName()
+	{
+		return name;
+	}
+
 	public Position getPosition()
 	{
 		return new Position(x, y);
