@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
@@ -17,6 +18,9 @@ import javax.swing.JOptionPane;
 import com.endercrypt.cs2dspy.gui.AwtWindow;
 import com.endercrypt.cs2dspy.gui.SplashWindow;
 import com.endercrypt.cs2dspy.gui.View;
+import com.endercrypt.cs2dspy.gui.keyboard.AppKeyListener;
+import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
+import com.endercrypt.cs2dspy.gui.keyboard.Keyboard.BindType;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
@@ -52,6 +56,7 @@ public class Main
 	private static View view;
 	private static SpyMap map;
 	private static SpyRealtime realtime;
+	private static Spectate spectate;
 
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
@@ -70,10 +75,19 @@ public class Main
 			return;
 		}
 
+		// spectate
+		spectate = new Spectate();
+
+		// bind keys
+		Keyboard keyboard = window.getKeyboard();
+		keyboard.bindKey(KeyEvent.VK_RIGHT, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.cycleNext(realtime));
+		keyboard.bindKey(KeyEvent.VK_LEFT, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.cyclePrev(realtime));
+		keyboard.bindKey(KeyEvent.VK_DOWN, Keyboard.BindType.PRESS, (keyCode, bindType) -> spectate.stop());
+
 		// create view and bind view-movement keys
 		Point mapCenter = map.getCenter();
 		view = new View(new Position(mapCenter.x * 32, mapCenter.y * 32));
-		view.bindMovementKeys(window.getKeyboard());
+		view.bindMovementKeys(keyboard);
 
 		// setup timer
 		timer = new Timer();
@@ -102,7 +116,7 @@ public class Main
 				{
 					realtime = new SpyRealtime(source);
 				}
-				catch (NumberFormatException e) // caught because conversation of an un-written value
+				catch (NumberFormatException e) // caught because conversation of a value that hasnt been entirely written
 				{
 					// ignore
 				}
@@ -129,8 +143,12 @@ public class Main
 		@Override
 		public void onDraw(Graphics2D g2d, Dimension screenSize)
 		{
-			Optional<SpyPlayer> selectedPlayer = Optional.empty();
+			Optional<SpyPlayer> hoverPlayer = Optional.empty();
 			Graphics2D hud = (Graphics2D) g2d.create();
+
+			// spectate if enabled
+			Optional<SpyPlayer> specPlayer = spectate.get(realtime);
+			specPlayer.ifPresent((player) -> view.centerPosition(player.getPosition(), screenSize));
 
 			// draw content
 			map.draw(g2d, view.getPosition(), screenSize);
@@ -139,12 +157,12 @@ public class Main
 			{
 				realtime.draw(g2d);
 				Point absoluteMousePosition = getAbsoluteMousePosition();
-				selectedPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
+				hoverPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
 
 				g2d.setStroke(new BasicStroke(1));
 				g2d.setColor(Color.BLACK);
 
-				selectedPlayer.ifPresent(new Consumer<SpyPlayer>()
+				hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
 				{
 					@Override
 					public void accept(SpyPlayer player)
@@ -156,7 +174,7 @@ public class Main
 			}
 
 			// draw HUD
-			drawHud(hud, selectedPlayer, screenSize);
+			drawHud(hud, hoverPlayer, screenSize);
 		}
 
 		private static Point getAbsoluteMousePosition()
@@ -168,9 +186,9 @@ public class Main
 			return mousePosition;
 		}
 
-		private static void drawHud(Graphics2D hud, Optional<SpyPlayer> selectedPlayer, Dimension screenSize)
+		private static void drawHud(Graphics2D hud, Optional<SpyPlayer> hoverPlayer, Dimension screenSize)
 		{
-			selectedPlayer.ifPresent((player) -> player.drawHudInfo(hud, window.getMousePosition()));
+			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, window.getMousePosition()));
 			if (realtime != null)
 			{
 				hud.setColor(Color.WHITE);

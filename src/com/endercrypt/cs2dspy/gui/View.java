@@ -1,5 +1,6 @@
 package com.endercrypt.cs2dspy.gui;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
@@ -61,6 +62,12 @@ public class View
 	public Position getPosition()
 	{
 		return position.getLocation();
+	}
+
+	public void centerPosition(Position position, Dimension screenSize)
+	{
+		this.position.x = position.x - (screenSize.width / 2);
+		this.position.y = position.y - (screenSize.height / 2);
 	}
 
 	public Motion getMotion()

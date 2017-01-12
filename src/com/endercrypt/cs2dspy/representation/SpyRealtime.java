@@ -7,6 +7,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import com.endercrypt.cs2dspy.AccessSource;
@@ -48,6 +52,11 @@ public class SpyRealtime
 			players[i] = new SpyPlayer(source);
 		}
 		ageMs = (int) (System.currentTimeMillis() - source.getAccessAge());
+	}
+
+	public SpyPlayer[] players()
+	{
+		return Arrays.copyOf(players, players.length);
 	}
 
 	public Optional<SpyPlayer> getNearbyPlayer(Point point, double maxLength)

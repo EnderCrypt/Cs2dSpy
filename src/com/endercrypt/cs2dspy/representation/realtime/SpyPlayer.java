@@ -168,7 +168,7 @@ public class SpyPlayer
 			catch (ArrayIndexOutOfBoundsException e)
 			{
 				System.err.println("Received unknown weapon type from cs2d: " + weaponType);
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 
