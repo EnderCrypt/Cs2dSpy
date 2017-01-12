@@ -2,6 +2,7 @@ package com.endercrypt.cs2dspy.representation;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -60,6 +61,16 @@ public class SpyMap
 	public byte getFrame(int x, int y)
 	{
 		return map[x][y];
+	}
+
+	public Dimension getSize()
+	{
+		return mapSize.getSize();
+	}
+
+	public Point getCenter()
+	{
+		return new Point(mapSize.width / 2, mapSize.height / 2);
 	}
 
 	public void draw(Graphics2D g2d, Position viewPosition, Dimension screenSize)

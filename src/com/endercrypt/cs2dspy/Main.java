@@ -58,10 +58,6 @@ public class Main
 		// create window
 		window = new AwtWindow("Cs2d Spy Client", new Dimension(1000, 500), new ApplicationGui());
 
-		// create view and bind keys
-		view = new View(new Position(0, 0));
-		view.bindMovementKeys(window.getKeyboard());
-
 		// read in map data from cs2d
 		try (AccessSource source = SpyAccess.MAP.access())
 		{
@@ -73,6 +69,11 @@ public class Main
 			System.exit(0);
 			return;
 		}
+
+		// create view and bind view-movement keys
+		Point mapCenter = map.getCenter();
+		view = new View(new Position(mapCenter.x * 32, mapCenter.y * 32));
+		view.bindMovementKeys(window.getKeyboard());
 
 		// setup timer
 		timer = new Timer();
