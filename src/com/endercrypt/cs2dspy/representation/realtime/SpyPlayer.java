@@ -203,4 +203,9 @@ public class SpyPlayer
 			return lines.iterator();
 		}
 	}
+
+	public boolean isBot()
+	{
+		return isBot;
+	}
 }

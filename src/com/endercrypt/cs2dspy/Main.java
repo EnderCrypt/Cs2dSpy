@@ -214,7 +214,8 @@ public class Main
 				@Override
 				public void accept(SpyPlayer player)
 				{
-					String text = "Spectating (ID: " + player.getID() + ") " + player.getName();
+					String botIndicator = player.isBot() ? ", BOT" : "";
+					String text = "Spectating (ID: " + player.getID() + botIndicator + ") " + player.getName();
 					Dimension textDimension = new Dimension(fontMetrics.stringWidth(text), fontMetrics.getHeight());
 					hud.setColor(new Color(255, 255, 255, 100));
 					hud.fillRect(screenSize.width - (textDimension.width + 10), 64, textDimension.width + 10, textDimension.height);
