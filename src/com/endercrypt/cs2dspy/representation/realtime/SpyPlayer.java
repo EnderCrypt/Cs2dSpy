@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.Optional;
 
 import com.endercrypt.cs2dspy.AccessSource;
+import com.endercrypt.cs2dspy.network.UsgnInfo;
+import com.endercrypt.cs2dspy.network.UsgnManager;
 import com.endercrypt.cs2dspy.representation.WeaponInfo;
 import com.endercrypt.cs2dspy.representation.WeaponInfo.Weapon;
 import com.endercrypt.library.position.Position;
@@ -35,6 +38,8 @@ import com.endercrypt.library.position.Position;
  */
 public class SpyPlayer
 {
+	private static final UsgnManager usgnManager = new UsgnManager();
+
 	private final int id;
 	private final boolean isBot;
 	private final String name;
@@ -42,6 +47,7 @@ public class SpyPlayer
 	private final int port;
 	private final int ping;
 	private final int usgn;
+	private final Optional<UsgnInfo> usgnInfo;
 	private final double x, y;
 	private final double rotation;
 	private final Health health;
@@ -61,7 +67,10 @@ public class SpyPlayer
 		ip = source.read();
 		port = source.readInt();
 		ping = source.readInt();
-		usgn = source.readInt();
+		//usgn = source.readInt();
+		source.readInt();
+		usgn = 138322;
+		usgnInfo = usgnManager.get(usgn);
 		x = source.readDouble();
 		y = source.readDouble();
 		rotation = Math.toRadians(source.readDouble() - 90);
@@ -137,8 +146,19 @@ public class SpyPlayer
 		{
 			lines.add("  ID: " + id + (isBot ? " (Bot)" : ""));
 			lines.add("Name: " + name);
-			lines.add("Ip: " + ip + ":" + port + " (" + ping + " ms)");
-			lines.add("Usgn: " + ((usgn == 0) ? "None" : usgn));
+			lines.add("IP: " + ip + ":" + port + " (" + ping + " ms)");
+			lines.add("U.S.G.N: " + ((usgn == 0) ? "None" : usgn));
+			if (usgnInfo.isPresent())
+			{
+				usgnInfo.get().addInfo(lines::add);
+			}
+			else
+			{
+				if (usgn > 0)
+				{
+					lines.add("(Fetching...)");
+				}
+			}
 			lines.add("Health: " + health);
 			lines.add("Money: " + money);
 			lines.add("S: " + score + " D: " + death);
