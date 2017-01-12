@@ -38,7 +38,7 @@ public class UsgnInfo
 		else
 			prefferedLanguage = "Unspecified";
 
-		daysRegistered = Integer.parseInt(document.select("span").last().html().split("<br>")[1].split(" ")[2]);
+		daysRegistered = Integer.parseInt(document.select("span").last().html().split("<br>")[1].split(" ")[2].replaceAll(",", ""));
 	}
 
 	public void addInfo(Consumer<String> infoConsumer)

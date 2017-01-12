@@ -40,7 +40,16 @@ public class UsgnDownloader implements Runnable
 	@Override
 	public void run()
 	{
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		}
 		Connection connection = Jsoup.connect("http://www.unrealsoftware.de/inc_pub/userinfo.php?id=" + usgn);
+		connection.userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.85 Safari/537.36");
 		connection.method(Connection.Method.GET);
 
 		Document document;
@@ -48,12 +57,11 @@ public class UsgnDownloader implements Runnable
 		{
 			Response response = connection.execute();
 			document = response.parse();
+			result.accept(new UsgnInfo(document));
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
-		result.accept(new UsgnInfo(document));
 	}
-
 }

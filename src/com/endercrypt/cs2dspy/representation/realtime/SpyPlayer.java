@@ -159,9 +159,17 @@ public class SpyPlayer
 			}
 			lines.add("Health: " + health);
 			lines.add("Money: " + money);
-			lines.add("S: " + score + " D: " + death);
-			Weapon weapon = WeaponInfo.getInstance().weapon(weaponType);
-			lines.add("Weapon: (" + weapon.getID() + ") " + weapon.getName());
+			lines.add("Score: " + score + " Deaths: " + death);
+			try
+			{
+				Weapon weapon = WeaponInfo.getInstance().weapon(weaponType);
+				lines.add("Weapon: (" + weapon.getID() + ") " + weapon.getName());
+			}
+			catch (ArrayIndexOutOfBoundsException e)
+			{
+				System.err.println("Received unknown weapon type from cs2d: " + weaponType);
+				e.printStackTrace();
+			}
 		}
 
 		private int getWidth(FontMetrics fontMetrics)

@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
  */
 public class UsgnManager
 {
-	private ExecutorService executorService = Executors.newCachedThreadPool();
+	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 	private Map<Integer, UsgnInfo> usgnInfoStorage = new HashMap<>();
 
 	public Optional<UsgnInfo> get(int usgn)
