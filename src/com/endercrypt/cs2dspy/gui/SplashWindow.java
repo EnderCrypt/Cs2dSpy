@@ -83,7 +83,7 @@ public class SplashWindow
 			g2d.fillRect(0, 0, screenSize.width, screenSize.height);
 			g2d.setColor(Color.BLACK);
 			int location = 2;
-			drawCentered(g2d, "Cs2d Spy V0.1", screenSize.width / 2, 16 * location);
+			drawCentered(g2d, "Cs2d Spy V0.2", screenSize.width / 2, 16 * location);
 			location++;
 			drawCentered(g2d, "Created By EnderCrypt (Magnus G)", screenSize.width / 2, 16 * location);
 			location++;
