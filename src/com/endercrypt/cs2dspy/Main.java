@@ -148,15 +148,15 @@ public class Main
 
 			// spectate if enabled
 			Optional<SpyPlayer> specPlayer = spectate.get(realtime);
-			specPlayer.ifPresent((player) -> view.centerPosition(player.getPosition(), screenSize));
+			specPlayer.ifPresent((player) -> view.setPosition(player.getPosition()));
 
 			// draw content
-			map.draw(g2d, view.getPosition(), screenSize);
-			view.translate(g2d);
+			map.draw(g2d, view, screenSize);
+			view.translate(g2d, screenSize);
 			if (realtime != null)
 			{
 				realtime.draw(g2d);
-				Point absoluteMousePosition = getAbsoluteMousePosition();
+				Point absoluteMousePosition = getAbsoluteMousePosition(screenSize);
 				hoverPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
 
 				g2d.setStroke(new BasicStroke(1));
@@ -177,9 +177,11 @@ public class Main
 			drawHud(hud, hoverPlayer, screenSize);
 		}
 
-		private static Point getAbsoluteMousePosition()
+		private static Point getAbsoluteMousePosition(Dimension screenSize)
 		{
 			Point mousePosition = window.getMousePosition();
+			mousePosition.x -= screenSize.width / 2;
+			mousePosition.y -= screenSize.height / 2;
 			Position position = view.getPosition();
 			mousePosition.x += position.x;
 			mousePosition.y += position.y;

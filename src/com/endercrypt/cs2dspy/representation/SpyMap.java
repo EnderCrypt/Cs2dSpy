@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import com.endercrypt.cs2dspy.AccessSource;
+import com.endercrypt.cs2dspy.gui.View;
 import com.endercrypt.cs2dspy.representation.map.Tileset;
 import com.endercrypt.library.position.Position;
 
@@ -73,8 +74,12 @@ public class SpyMap
 		return new Point(mapSize.width / 2, mapSize.height / 2);
 	}
 
-	public void draw(Graphics2D g2d, Position viewPosition, Dimension screenSize)
+	public void draw(Graphics2D g2d, View view, Dimension screenSize)
 	{
+		Position viewPosition = view.getPosition();
+		viewPosition.x -= (screenSize.width / 2);
+		viewPosition.y -= (screenSize.height / 2);
+
 		int xTiles = (int) ((screenSize.getWidth() / Tileset.TILE_SIZE) + 2);
 		int yTiles = (int) ((screenSize.getHeight() / Tileset.TILE_SIZE) + 2);
 

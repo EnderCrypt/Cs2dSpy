@@ -3,6 +3,7 @@ package com.endercrypt.cs2dspy.gui;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
 
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard.BindType;
@@ -30,9 +31,14 @@ import com.endercrypt.library.position.Position;
 public class View
 {
 	public static final double VIEW_SPEED = 5;
+	public static final double ZOOM_SPEED = 0.01;
 
 	private Position position;
 	private Motion motion;
+	/*
+	private double zoom = 1.0;
+	private double zoomMotion = 0.0;
+	*/
 
 	public View(Position position)
 	{
@@ -46,17 +52,44 @@ public class View
 		keyboard.bindKey(KeyEvent.VK_D, BindType.HOLD, (keyCode, bindType) -> motion.x += VIEW_SPEED);
 		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= VIEW_SPEED);
 		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += VIEW_SPEED);
+		/*
+		keyboard.bindKey(KeyEvent.VK_Q, BindType.HOLD, (keyCode, bindType) -> zoomMotion += ZOOM_SPEED);
+		keyboard.bindKey(KeyEvent.VK_E, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= ZOOM_SPEED);
+		*/
 	}
 
 	public void update()
 	{
+		// move
 		position.add(motion);
 		motion.multiplyLength(0.8);
+		/*
+				// zoom
+				zoom += zoomMotion;
+				zoomMotion *= 0.9;
+				if (zoom < 1)
+					zoom = 1;
+					*/
 	}
 
-	public void translate(Graphics2D g2d)
+	/*
+		public double getZoom()
+		{
+			return zoom;
+		}
+	
+	public double getDividedZoom()
 	{
-		g2d.translate(-position.x, -position.y);
+		return 1.0 / getZoom();
+	}
+	*/
+
+	public void translate(Graphics2D g2d, Dimension screenSize)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.translate(-position.x, -position.y);
+		transform.translate((screenSize.width / 2), (screenSize.height / 2));
+		g2d.transform(transform);
 	}
 
 	public Position getPosition()
@@ -64,10 +97,10 @@ public class View
 		return position.getLocation();
 	}
 
-	public void centerPosition(Position position, Dimension screenSize)
+	public void setPosition(Position position)
 	{
-		this.position.x = position.x - (screenSize.width / 2);
-		this.position.y = position.y - (screenSize.height / 2);
+		this.position.x = position.x;
+		this.position.y = position.y;
 	}
 
 	public Motion getMotion()
