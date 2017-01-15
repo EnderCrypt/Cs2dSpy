@@ -14,7 +14,16 @@ public class GuiText
 
 	public void addText(String text, Color color)
 	{
-		texts.addLast(new Text(text, color));
+		addText(new Text(text, color));
+
+	}
+
+	public void addText(Text... texts)
+	{
+		for (Text text : texts)
+		{
+			this.texts.addLast(text);
+		}
 	}
 
 	private int getWidth(FontMetrics fontMetrics)
@@ -58,7 +67,7 @@ public class GuiText
 		}
 	}
 
-	private static class Text
+	public static class Text
 	{
 		private String text;
 		private Color color;
