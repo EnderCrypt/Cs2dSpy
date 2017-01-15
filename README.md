@@ -1,5 +1,4 @@
 # Cs2dSpy
-### Version 0.1
 
 public download: http://www.unrealsoftware.de/files_show.php?file=17266
 
