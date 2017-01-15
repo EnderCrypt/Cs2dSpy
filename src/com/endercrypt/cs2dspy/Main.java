@@ -150,6 +150,9 @@ public class Main
 		private Dimension screenSize;
 		private Optional<SpyPlayer> hoverPlayer = Optional.empty();
 		private Optional<SpyPlayer> spectPlayer = Optional.empty();
+		private Point mousePosition;
+		private Point absoluteMousePosition;
+		private Point absoluteTilePosition;
 
 		@Override
 		public void onDraw(Graphics2D guiG2d, Dimension guiScreenSize)
@@ -158,6 +161,10 @@ public class Main
 			hud = (Graphics2D) g2d.create();
 			fontMetrics = g2d.getFontMetrics();
 			screenSize = guiScreenSize;
+
+			mousePosition = window.getMousePosition();
+			absoluteMousePosition = calculateAbsolutePosition(mousePosition);
+			absoluteTilePosition = new Point(absoluteMousePosition.x / 32, absoluteMousePosition.y / 32);
 
 			// spectate if enabled
 			spectPlayer = spectate.get(realtime);
@@ -169,7 +176,6 @@ public class Main
 			if (realtime != null)
 			{
 				realtime.draw(g2d);
-				Point absoluteMousePosition = getAbsoluteMousePosition();
 				hoverPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
 
 				g2d.setStroke(new BasicStroke(1));
@@ -190,9 +196,8 @@ public class Main
 			drawHud();
 		}
 
-		private Point getAbsoluteMousePosition()
+		private Point calculateAbsolutePosition(Point mousePosition)
 		{
-			Point mousePosition = window.getMousePosition();
 			mousePosition.x -= screenSize.width / 2;
 			mousePosition.y -= screenSize.height / 2;
 			Position position = view.getPosition();
@@ -203,13 +208,20 @@ public class Main
 
 		private void drawHud()
 		{
-			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, window.getMousePosition()));
+			// draw mouse position
+			GuiText guiText = new GuiText();
+			guiText.addText(absoluteMousePosition.x + ", " + absoluteMousePosition.y + " (" + absoluteTilePosition.x + "|" + absoluteTilePosition.y + ")", Color.BLACK);
+			guiText.draw(hud, Alignment.RIGHT, 10, 10);
+
+			// draw data about player near mouse
+			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, mousePosition));
 			if (realtime != null)
 			{
 				hud.setColor(Color.WHITE);
 				realtime.drawHud(hud, screenSize);
 			}
 
+			// draw info about spectating a player
 			Optional<SpyPlayer> specPlayer = spectate.get(realtime);
 			specPlayer.ifPresent(new Consumer<SpyPlayer>()
 			{
