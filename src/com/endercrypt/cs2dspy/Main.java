@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 
 import com.endercrypt.cs2dspy.gui.AwtWindow;
+import com.endercrypt.cs2dspy.gui.GuiText;
+import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
 import com.endercrypt.cs2dspy.gui.SplashWindow;
 import com.endercrypt.cs2dspy.gui.View;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
@@ -214,13 +216,15 @@ public class Main
 				@Override
 				public void accept(SpyPlayer player)
 				{
-					String botIndicator = player.isBot() ? ", BOT" : "";
-					String text = "Spectating (ID: " + player.getID() + botIndicator + ") " + player.getName();
-					Dimension textDimension = new Dimension(fontMetrics.stringWidth(text), fontMetrics.getHeight());
-					hud.setColor(new Color(255, 255, 255, 100));
-					hud.fillRect(screenSize.width - (textDimension.width + 10), 64, textDimension.width + 10, textDimension.height);
-					hud.setColor(Color.BLACK);
-					hud.drawString(text, screenSize.width - (textDimension.width + 5), 64 + fontMetrics.getAscent());
+					GuiText guiText = new GuiText();
+					guiText.addText("Spectating (" + player.getID(), Color.BLACK);
+					if (player.isBot())
+					{
+						guiText.addText(", Bot", Color.BLACK);
+					}
+					guiText.addText(") ", Color.BLACK);
+					guiText.addText(player.getName(), player.getTeam().getColor());
+					guiText.draw(hud, Alignment.LEFT, screenSize.width - 7, 10);
 				}
 			});
 		}

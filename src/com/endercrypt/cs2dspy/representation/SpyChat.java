@@ -1,5 +1,8 @@
 package com.endercrypt.cs2dspy.representation;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -7,6 +10,7 @@ import java.util.Iterator;
 
 import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.representation.chat.ChatMessage;
+import com.endercrypt.cs2dspy.representation.realtime.Team;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -43,5 +47,16 @@ public class SpyChat implements Iterable<ChatMessage>
 	public Iterator<ChatMessage> iterator()
 	{
 		return chat.iterator();
+	}
+
+	public void draw(Graphics2D g2d, Dimension screenSize)
+	{
+		int y = screenSize.height - 5;
+		int height = g2d.getFontMetrics().getHeight();
+		for (ChatMessage chatMessage : this)
+		{
+			y -= height;
+			chatMessage.draw(g2d, 5, y);
+		}
 	}
 }

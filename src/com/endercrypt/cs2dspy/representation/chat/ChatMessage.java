@@ -1,8 +1,12 @@
 package com.endercrypt.cs2dspy.representation.chat;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.IOException;
 
 import com.endercrypt.cs2dspy.AccessSource;
+import com.endercrypt.cs2dspy.gui.GuiText;
+import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
 import com.endercrypt.cs2dspy.representation.realtime.Team;
 
 /**
@@ -29,11 +33,18 @@ public class ChatMessage
 	private String name;
 	private String message;
 
+	private GuiText guiText;
+
 	public ChatMessage(AccessSource source) throws NumberFormatException, IOException
 	{
 		team = Team.parse(source.readInt());
 		name = source.read();
 		message = source.read();
+
+		guiText = new GuiText();
+		guiText.addText(name, team.getColor());
+		guiText.addText(": ", Color.YELLOW);
+		guiText.addText(message, Color.YELLOW);
 	}
 
 	public Team getTeam()
@@ -49,5 +60,10 @@ public class ChatMessage
 	public String getMessage()
 	{
 		return message;
+	}
+
+	public void draw(Graphics2D g2d, int x, int y)
+	{
+		guiText.draw(g2d, Alignment.RIGHT, x, y);
 	}
 }

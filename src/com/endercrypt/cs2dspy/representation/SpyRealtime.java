@@ -106,20 +106,6 @@ public class SpyRealtime
 		}
 
 		// chat
-		int y = screenSize.height;
-		for (ChatMessage chatMessage : spyChat)
-		{
-			Team team = chatMessage.getTeam();
-			String name = chatMessage.getName();
-			String message = chatMessage.getMessage();
-			String totalString = name + ": " + message;
-			y -= 20;
-			hud.setColor(new Color(255, 255, 255, 100));
-			hud.fillRect(0, y - fontMetrics.getAscent() - 1, fontMetrics.stringWidth(totalString) + 10, 20);
-			hud.setColor(team.getColor());
-			hud.drawString(name + ": ", 5, y);
-			hud.setColor(Color.BLACK);
-			hud.drawString(message, 5 + fontMetrics.stringWidth(name + ": "), y);
-		}
+		spyChat.draw(hud, screenSize);
 	}
 }

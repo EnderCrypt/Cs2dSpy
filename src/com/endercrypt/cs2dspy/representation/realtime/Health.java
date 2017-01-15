@@ -41,7 +41,7 @@ public class Health
 
 		int b = 0;
 		int g = (int) (percentage * 2.55);
-		g = Math.max(255, Math.min(0, g));
+		g = Math.max(0, Math.min(255, g));
 		int r = 255 - g;
 		color = new Color(r, g, b);
 	}

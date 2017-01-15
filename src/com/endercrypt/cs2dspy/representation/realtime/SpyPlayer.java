@@ -92,6 +92,11 @@ public class SpyPlayer
 		return name;
 	}
 
+	public Team getTeam()
+	{
+		return team;
+	}
+
 	public Position getPosition()
 	{
 		return new Position(x, y);
