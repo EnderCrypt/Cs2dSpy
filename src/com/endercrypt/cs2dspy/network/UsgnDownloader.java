@@ -29,25 +29,17 @@ import org.jsoup.nodes.Document;
 public class UsgnDownloader implements Runnable
 {
 	private int usgn;
-	private Consumer<UsgnInfo> result;
+	private Consumer<UsgnInfo> resultCallback;
 
-	public UsgnDownloader(int usgn, Consumer<UsgnInfo> result)
+	public UsgnDownloader(int usgn, Consumer<UsgnInfo> resultCallback)
 	{
 		this.usgn = usgn;
-		this.result = result;
+		this.resultCallback = resultCallback;
 	}
 
 	@Override
 	public void run()
 	{
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			throw new RuntimeException(e);
-		}
 		Connection connection = Jsoup.connect("http://www.unrealsoftware.de/inc_pub/userinfo.php?id=" + usgn);
 		connection.userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.85 Safari/537.36");
 		connection.method(Connection.Method.GET);
@@ -57,7 +49,7 @@ public class UsgnDownloader implements Runnable
 		{
 			Response response = connection.execute();
 			document = response.parse();
-			result.accept(new UsgnInfo(document));
+			resultCallback.accept(new UsgnInfo(document));
 		}
 		catch (IOException e)
 		{

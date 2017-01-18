@@ -5,13 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
 import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
+import com.endercrypt.library.position.Position;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -54,13 +54,13 @@ public class SpyRealtime
 		return Arrays.copyOf(players, players.length);
 	}
 
-	public Optional<SpyPlayer> getNearbyPlayer(Point point, double maxLength)
+	public Optional<SpyPlayer> getNearbyPlayer(Position position, double maxLength)
 	{
 		SpyPlayer spyPlayer = null;
 		double dist = maxLength;
 		for (SpyPlayer player : players)
 		{
-			double cDist = player.getPosition().distance(point.x, point.y);
+			double cDist = player.getPosition().distance(position);
 			if (cDist < dist)
 			{
 				spyPlayer = player;
@@ -77,6 +77,7 @@ public class SpyRealtime
 		{
 			player.draw(g2d);
 		}
+		g2d.setStroke(new BasicStroke(1));
 	}
 
 	public void drawHud(Graphics2D hud, Dimension screenSize)

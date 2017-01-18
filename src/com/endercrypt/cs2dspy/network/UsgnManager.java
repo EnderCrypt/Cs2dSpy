@@ -3,8 +3,6 @@ package com.endercrypt.cs2dspy.network;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -26,25 +24,20 @@ import java.util.concurrent.Executors;
  */
 public class UsgnManager
 {
-	private ExecutorService executorService = Executors.newFixedThreadPool(1);
-	private Map<Integer, UsgnInfo> usgnInfoStorage = new HashMap<>();
+	private Map<Integer, UsgnInfoTracker> usgnInfoStorage = new HashMap<>();
 
 	public Optional<UsgnInfo> get(int usgn)
 	{
-		UsgnInfo info = null;
 		if (usgn > 0)
 		{
-			info = usgnInfoStorage.get(usgn);
-			if (info == null)
+			UsgnInfoTracker usgnTracker = usgnInfoStorage.get(usgn);
+			if (usgnTracker == null)
 			{
-				downloadUsgnInfo(usgn);
+				usgnTracker = new UsgnInfoTracker(usgn);
+				usgnInfoStorage.put(usgn, usgnTracker);
 			}
+			return usgnTracker.get();
 		}
-		return Optional.ofNullable(info);
-	}
-
-	private void downloadUsgnInfo(int usgn)
-	{
-		executorService.submit(new UsgnDownloader(usgn, (result) -> usgnInfoStorage.put(usgn, result)));
+		return Optional.empty();
 	}
 }
