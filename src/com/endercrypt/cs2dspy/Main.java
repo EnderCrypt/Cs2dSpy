@@ -143,25 +143,22 @@ public class Main
 
 	private static class ApplicationGui implements AwtWindow.DrawListener
 	{
-		private Graphics2D g2d;
-		private Graphics2D hud;
 		private Dimension screenSize;
 		private Optional<SpyPlayer> hoverPlayer = Optional.empty();
 		private Optional<SpyPlayer> spectPlayer = Optional.empty();
-		private Point mousePosition;
-		private Point mapMousePosition;
+		private Position mousePosition;
+		private Position mapMousePosition;
 		private Point mapTilePosition;
 
 		@Override
-		public void onDraw(Graphics2D guiG2d, Dimension guiScreenSize)
+		public void onDraw(Graphics2D g2d, Dimension guiScreenSize)
 		{
-			g2d = guiG2d;
-			hud = (Graphics2D) g2d.create();
+			Graphics2D hudG2d = (Graphics2D) g2d.create();
 			screenSize = guiScreenSize;
 
-			mousePosition = window.getMousePosition();
-			mapMousePosition = calculateAbsolutePosition(mousePosition);
-			mapTilePosition = new Point(mapMousePosition.x / 32, mapMousePosition.y / 32);
+			mousePosition = new Position(window.getMousePosition());
+			mapMousePosition = generateMapPosition(mousePosition);
+			mapTilePosition = new Point((int) (mapMousePosition.x / 32), (int) (mapMousePosition.y / 32));
 
 			// spectate if enabled
 			spectPlayer = spectate.get(realtime);
@@ -174,27 +171,29 @@ public class Main
 			{
 				realtime.draw(g2d);
 				hoverPlayer = realtime.getNearbyPlayer(mapMousePosition, 250.0);
-
-				g2d.setStroke(new BasicStroke(1));
-				g2d.setColor(Color.BLACK);
-
-				hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
-				{
-					@Override
-					public void accept(SpyPlayer player)
-					{
-						Position position = player.getPosition();
-						g2d.drawLine(mapMousePosition.x, mapMousePosition.y, (int) position.x, (int) position.y);
-					}
-				});
 			}
 
+			// dispose graphics
+			g2d.dispose();
+
 			// draw HUD
-			drawHud();
+			drawHud(hudG2d);
 		}
 
-		private Point calculateAbsolutePosition(Point position)
+		private Position generateHudPosition(Position position)
 		{
+			position = position.getLocation();
+			position.x += screenSize.width / 2;
+			position.y += screenSize.height / 2;
+			Position viewPosition = view.getPosition();
+			position.x -= viewPosition.x;
+			position.y -= viewPosition.y;
+			return position;
+		}
+
+		private Position generateMapPosition(Position position)
+		{
+			position = position.getLocation();
 			position.x -= screenSize.width / 2;
 			position.y -= screenSize.height / 2;
 			Position viewPosition = view.getPosition();
@@ -203,24 +202,35 @@ public class Main
 			return position;
 		}
 
-		private void drawHud()
+		private void drawHud(Graphics2D g2d)
 		{
+			g2d.setColor(Color.BLACK);
 			// draw mouse position
 			GuiText guiLocationText = new GuiText();
-			guiLocationText.addText(mapMousePosition.x + ", " + mapMousePosition.y + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
-			guiLocationText.draw(hud, Alignment.RIGHT, 10, 10);
+			guiLocationText.addText(Math.round(mapMousePosition.x) + ", " + Math.round(mapMousePosition.y) + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
+			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10);
 
 			// draw data about player near mouse
-			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, mapMousePosition));
+			hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
+			{
+				@Override
+				public void accept(SpyPlayer player)
+				{
+					Position position = player.getPosition();
+					Position hudPosition = generateHudPosition(position);
+					g2d.drawLine((int) hudPosition.x, (int) hudPosition.y, (int) mousePosition.x, (int) mousePosition.y);
+					player.drawHudInfo(g2d, new Point((int) mousePosition.x, (int) mousePosition.y));
+				}
+			});
+
 			if (realtime != null)
 			{
-				hud.setColor(Color.WHITE);
-				realtime.drawHud(hud, screenSize);
+				g2d.setColor(Color.WHITE);
+				realtime.drawHud(g2d, screenSize);
 			}
 
 			// draw info about spectating a player
-			Optional<SpyPlayer> specPlayer = spectate.get(realtime);
-			specPlayer.ifPresent(new Consumer<SpyPlayer>()
+			spectate.get(realtime).ifPresent(new Consumer<SpyPlayer>()
 			{
 				@Override
 				public void accept(SpyPlayer player)
@@ -233,7 +243,7 @@ public class Main
 					}
 					guiSpectatingText.addText(") ", Color.BLACK);
 					guiSpectatingText.addText(player.getName(), player.getTeam().getColor());
-					guiSpectatingText.draw(hud, Alignment.LEFT, screenSize.width - 7, 10);
+					guiSpectatingText.draw(g2d, Alignment.LEFT, screenSize.width - 7, 10);
 				}
 			});
 		}
