@@ -1,6 +1,5 @@
 package com.endercrypt.cs2dspy.representation;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.util.Iterator;
 
 import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.representation.chat.ChatMessage;
-import com.endercrypt.cs2dspy.representation.realtime.Team;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson

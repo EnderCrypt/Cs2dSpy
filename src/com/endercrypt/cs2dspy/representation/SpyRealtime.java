@@ -11,9 +11,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.endercrypt.cs2dspy.AccessSource;
-import com.endercrypt.cs2dspy.representation.chat.ChatMessage;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
-import com.endercrypt.cs2dspy.representation.realtime.Team;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
