@@ -3,7 +3,6 @@ package com.endercrypt.cs2dspy;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -146,25 +145,23 @@ public class Main
 	{
 		private Graphics2D g2d;
 		private Graphics2D hud;
-		private FontMetrics fontMetrics;
 		private Dimension screenSize;
 		private Optional<SpyPlayer> hoverPlayer = Optional.empty();
 		private Optional<SpyPlayer> spectPlayer = Optional.empty();
 		private Point mousePosition;
-		private Point absoluteMousePosition;
-		private Point absoluteTilePosition;
+		private Point mapMousePosition;
+		private Point mapTilePosition;
 
 		@Override
 		public void onDraw(Graphics2D guiG2d, Dimension guiScreenSize)
 		{
 			g2d = guiG2d;
 			hud = (Graphics2D) g2d.create();
-			fontMetrics = g2d.getFontMetrics();
 			screenSize = guiScreenSize;
 
 			mousePosition = window.getMousePosition();
-			absoluteMousePosition = calculateAbsolutePosition(mousePosition);
-			absoluteTilePosition = new Point(absoluteMousePosition.x / 32, absoluteMousePosition.y / 32);
+			mapMousePosition = calculateAbsolutePosition(mousePosition);
+			mapTilePosition = new Point(mapMousePosition.x / 32, mapMousePosition.y / 32);
 
 			// spectate if enabled
 			spectPlayer = spectate.get(realtime);
@@ -176,7 +173,7 @@ public class Main
 			if (realtime != null)
 			{
 				realtime.draw(g2d);
-				hoverPlayer = realtime.getNearbyPlayer(absoluteMousePosition, 250.0);
+				hoverPlayer = realtime.getNearbyPlayer(mapMousePosition, 250.0);
 
 				g2d.setStroke(new BasicStroke(1));
 				g2d.setColor(Color.BLACK);
@@ -187,7 +184,7 @@ public class Main
 					public void accept(SpyPlayer player)
 					{
 						Position position = player.getPosition();
-						g2d.drawLine(absoluteMousePosition.x, absoluteMousePosition.y, (int) position.x, (int) position.y);
+						g2d.drawLine(mapMousePosition.x, mapMousePosition.y, (int) position.x, (int) position.y);
 					}
 				});
 			}
@@ -196,25 +193,25 @@ public class Main
 			drawHud();
 		}
 
-		private Point calculateAbsolutePosition(Point mousePosition)
+		private Point calculateAbsolutePosition(Point position)
 		{
-			mousePosition.x -= screenSize.width / 2;
-			mousePosition.y -= screenSize.height / 2;
-			Position position = view.getPosition();
-			mousePosition.x += position.x;
-			mousePosition.y += position.y;
-			return mousePosition;
+			position.x -= screenSize.width / 2;
+			position.y -= screenSize.height / 2;
+			Position viewPosition = view.getPosition();
+			position.x += viewPosition.x;
+			position.y += viewPosition.y;
+			return position;
 		}
 
 		private void drawHud()
 		{
 			// draw mouse position
-			GuiText guiText = new GuiText();
-			guiText.addText(absoluteMousePosition.x + ", " + absoluteMousePosition.y + " (" + absoluteTilePosition.x + "|" + absoluteTilePosition.y + ")", Color.BLACK);
-			guiText.draw(hud, Alignment.RIGHT, 10, 10);
+			GuiText guiLocationText = new GuiText();
+			guiLocationText.addText(mapMousePosition.x + ", " + mapMousePosition.y + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
+			guiLocationText.draw(hud, Alignment.RIGHT, 10, 10);
 
 			// draw data about player near mouse
-			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, mousePosition));
+			hoverPlayer.ifPresent((player) -> player.drawHudInfo(hud, mapMousePosition));
 			if (realtime != null)
 			{
 				hud.setColor(Color.WHITE);
@@ -228,15 +225,15 @@ public class Main
 				@Override
 				public void accept(SpyPlayer player)
 				{
-					GuiText guiText = new GuiText();
-					guiText.addText("Spectating (" + player.getID(), Color.BLACK);
+					GuiText guiSpectatingText = new GuiText();
+					guiSpectatingText.addText("Spectating (" + player.getID(), Color.BLACK);
 					if (player.isBot())
 					{
-						guiText.addText(", Bot", Color.BLACK);
+						guiSpectatingText.addText(", Bot", Color.BLACK);
 					}
-					guiText.addText(") ", Color.BLACK);
-					guiText.addText(player.getName(), player.getTeam().getColor());
-					guiText.draw(hud, Alignment.LEFT, screenSize.width - 7, 10);
+					guiSpectatingText.addText(") ", Color.BLACK);
+					guiSpectatingText.addText(player.getName(), player.getTeam().getColor());
+					guiSpectatingText.draw(hud, Alignment.LEFT, screenSize.width - 7, 10);
 				}
 			});
 		}

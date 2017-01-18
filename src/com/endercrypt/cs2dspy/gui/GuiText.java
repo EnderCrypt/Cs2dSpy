@@ -18,11 +18,11 @@ public class GuiText
 
 	}
 
-	public void addText(Text... texts)
+	public void addText(Text... textValues)
 	{
-		for (Text text : texts)
+		for (Text text : textValues)
 		{
-			this.texts.addLast(text);
+			texts.addLast(text);
 		}
 	}
 
