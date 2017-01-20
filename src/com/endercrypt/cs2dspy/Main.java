@@ -17,9 +17,9 @@ import javax.swing.JOptionPane;
 import com.endercrypt.cs2dspy.gui.AwtWindow;
 import com.endercrypt.cs2dspy.gui.GuiText;
 import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
-import com.endercrypt.cs2dspy.gui.SplashWindow;
 import com.endercrypt.cs2dspy.gui.View;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
+import com.endercrypt.cs2dspy.gui.splash.SplashWindow;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
@@ -137,7 +137,7 @@ public class Main
 		window.show();
 
 		// show splash screen
-		SplashWindow.create().show();
+		SplashWindow.create().showBlocking();
 	}
 
 	private static class ApplicationGui implements AwtWindow.DrawListener
