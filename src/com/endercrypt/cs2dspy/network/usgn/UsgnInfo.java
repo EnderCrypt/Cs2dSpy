@@ -1,4 +1,4 @@
-package com.endercrypt.cs2dspy.network;
+package com.endercrypt.cs2dspy.network.usgn;
 
 import java.util.function.Consumer;
 import org.jsoup.nodes.Document;

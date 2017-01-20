@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import com.endercrypt.cs2dspy.AccessSource;
-import com.endercrypt.cs2dspy.network.UsgnInfo;
-import com.endercrypt.cs2dspy.network.UsgnManager;
+import com.endercrypt.cs2dspy.network.usgn.UsgnInfo;
+import com.endercrypt.cs2dspy.network.usgn.UsgnManager;
 import com.endercrypt.cs2dspy.representation.WeaponInfo;
 import com.endercrypt.cs2dspy.representation.WeaponInfo.Weapon;
 import com.endercrypt.library.position.Position;
