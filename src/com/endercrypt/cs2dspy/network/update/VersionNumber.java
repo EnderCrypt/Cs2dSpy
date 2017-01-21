@@ -85,7 +85,7 @@ public class VersionNumber
 			}
 			if (score < otherScore)
 			{
-				return new GenericVersion("Version Out Of Date!", new Color(255, 100, 100));
+				return new GenericVersion("Version Out Of Date!", new Color(255, 50, 50));
 			}
 		}
 		return null; // impossible
