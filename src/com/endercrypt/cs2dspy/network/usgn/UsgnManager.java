@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.endercrypt.cs2dspy.setting.Settings;
+
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
  *
@@ -26,8 +28,14 @@ public class UsgnManager
 {
 	private Map<Integer, UsgnInfoTracker> usgnInfoStorage = new HashMap<>();
 
+	private static boolean fetchExternalUsgnData = Settings.get().key("Cs2d.FetchExternalUsgnData").getBoolean();
+
 	public Optional<UsgnInfo> get(int usgn)
 	{
+		if (fetchExternalUsgnData == false)
+		{
+			return Optional.empty();
+		}
 		if (usgn > 0)
 		{
 			UsgnInfoTracker usgnTracker = usgnInfoStorage.get(usgn);

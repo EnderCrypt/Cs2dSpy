@@ -11,6 +11,7 @@ Client.FontSize = 12
 // Cs2d
 Cs2d.UpdateFrequency = 1
 Cs2d.ChatSize = 10
+Cs2d.FetchExternalUsgnData = True
 
 // Directories
 Directory.AccessFolder = Access

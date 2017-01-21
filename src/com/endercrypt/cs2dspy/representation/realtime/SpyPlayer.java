@@ -16,6 +16,7 @@ import com.endercrypt.cs2dspy.network.usgn.UsgnInfo;
 import com.endercrypt.cs2dspy.network.usgn.UsgnManager;
 import com.endercrypt.cs2dspy.representation.WeaponInfo;
 import com.endercrypt.cs2dspy.representation.WeaponInfo.Weapon;
+import com.endercrypt.cs2dspy.setting.Settings;
 import com.endercrypt.library.position.Position;
 
 /**
@@ -39,6 +40,8 @@ import com.endercrypt.library.position.Position;
 public class SpyPlayer
 {
 	private static final UsgnManager usgnManager = new UsgnManager();
+
+	private static boolean fetchExternalUsgnData = Settings.get().key("Cs2d.FetchExternalUsgnData").getBoolean();
 
 	private final int id;
 	private final boolean isBot;
@@ -162,7 +165,7 @@ public class SpyPlayer
 			}
 			else
 			{
-				if (usgn > 0)
+				if ((usgn > 0) && (fetchExternalUsgnData))
 				{
 					lines.add("(Fetching...)");
 				}
