@@ -89,4 +89,16 @@ public class VersionNumber
 	{
 		return Arrays.toString(version);
 	}
+
+	public String toString(String separator)
+	{
+		StringBuilder sb = new StringBuilder();
+		for (int v : version)
+		{
+			sb.append(String.valueOf(v));
+			sb.append(separator);
+		}
+		sb.setLength(sb.length() - separator.length());
+		return sb.toString();
+	}
 }

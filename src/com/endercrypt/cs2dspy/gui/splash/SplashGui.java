@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
 import com.endercrypt.cs2dspy.gui.AwtWindow.DrawListener;
+import com.endercrypt.cs2dspy.network.update.VersionManager;
 
 public class SplashGui implements DrawListener
 {
@@ -16,7 +17,7 @@ public class SplashGui implements DrawListener
 		g2d.fillRect(0, 0, screenSize.width, screenSize.height);
 		g2d.setColor(Color.BLACK);
 		int location = 2;
-		drawCentered(g2d, "Cs2d Spy V0.2", screenSize.width / 2, 16 * location);
+		drawCentered(g2d, "Cs2d Spy Version " + VersionManager.getCurrentVersion().toString("."), screenSize.width / 2, 16 * location);
 		location++;
 		drawCentered(g2d, "Created By EnderCrypt (Magnus G)", screenSize.width / 2, 16 * location);
 		location++;
@@ -31,7 +32,7 @@ public class SplashGui implements DrawListener
 		drawCentered(g2d, "Read LICENSE.txt for further info", screenSize.width / 2, 16 * location);
 	}
 
-	private void drawCentered(Graphics2D g2d, String text, int x, int y)
+	private static void drawCentered(Graphics2D g2d, String text, int x, int y)
 	{
 		FontMetrics fontMetrics = g2d.getFontMetrics();
 		int stringWidth = fontMetrics.stringWidth(text);
