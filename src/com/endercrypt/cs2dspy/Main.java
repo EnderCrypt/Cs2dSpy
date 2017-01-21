@@ -20,6 +20,8 @@ import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
 import com.endercrypt.cs2dspy.gui.View;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
 import com.endercrypt.cs2dspy.gui.splash.SplashWindow;
+import com.endercrypt.cs2dspy.network.update.VersionManager;
+import com.endercrypt.cs2dspy.network.update.version.Version;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
@@ -56,6 +58,7 @@ public class Main
 	private static SpyMap map;
 	private static SpyRealtime realtime;
 	private static Spectate spectate;
+	private static Optional<Version> version = Optional.empty();
 
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
@@ -136,8 +139,12 @@ public class Main
 		// show main window
 		window.show();
 
-		// show splash screen
+		// show splash screen & wait untill it finishes
 		SplashWindow.create().showBlocking();
+
+		// check for update
+		System.out.println("Current version: " + VersionManager.getCurrentVersion());
+		version = Optional.of(VersionManager.get().blockingDownloadVersion());
 	}
 
 	private static class ApplicationGui implements AwtWindow.DrawListener
@@ -209,6 +216,9 @@ public class Main
 			guiLocationText.addText(Math.round(mapMousePosition.x) + ", " + Math.round(mapMousePosition.y) + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
 			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10);
 
+			// draw version info
+			version.ifPresent((v) -> v.draw(g2d, 10, 30, Alignment.RIGHT));
+
 			// draw data about player near mouse
 			hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
 			{
@@ -217,11 +227,13 @@ public class Main
 				{
 					Position position = player.getPosition();
 					Position hudPosition = generateHudPosition(position);
+					g2d.setColor(Color.BLACK);
 					g2d.drawLine((int) hudPosition.x, (int) hudPosition.y, (int) mousePosition.x, (int) mousePosition.y);
 					player.drawHudInfo(g2d, new Point((int) mousePosition.x, (int) mousePosition.y));
 				}
 			});
 
+			// draw hud
 			if (realtime != null)
 			{
 				g2d.setColor(Color.WHITE);
