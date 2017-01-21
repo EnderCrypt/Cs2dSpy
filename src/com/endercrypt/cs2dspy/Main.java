@@ -25,6 +25,7 @@ import com.endercrypt.cs2dspy.network.update.version.Version;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
+import com.endercrypt.cs2dspy.setting.Settings;
 import com.endercrypt.library.position.Position;
 
 /**
@@ -47,9 +48,9 @@ import com.endercrypt.library.position.Position;
  */
 public class Main
 {
-	private static final int G_FPS = 50; // Graphical FPS
-	private static final int Cs2dSpyUpdateFrequency = 5;
-	private static final int U_FPS = 50 / Cs2dSpyUpdateFrequency; // Update FPS
+	private static int G_FPS; // Graphical FPS
+	private static int Cs2dSpyUpdateFrequency;
+	private static int U_FPS; // Update FPS
 
 	private static Timer timer;
 
@@ -62,8 +63,17 @@ public class Main
 
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
+		// read settings
+		Settings settings = Settings.get();
+		Dimension screenSize = new Dimension(settings.key("Client.Width").getInteger(), settings.key("Client.Height").getInteger());
+		G_FPS = settings.key("Client.Fps").getInteger();
+		Cs2dSpyUpdateFrequency = settings.key("Cs2d.UpdateFrequency").getInteger();
+		U_FPS = 50 / Cs2dSpyUpdateFrequency;
+
+		System.out.println("Starting Cs2d client...");
+
 		// create window
-		window = new AwtWindow("Cs2d Spy Client", new Dimension(1000, 500), new ApplicationGui());
+		window = new AwtWindow("Cs2d Spy Client", screenSize, new ApplicationGui());
 
 		// read in map data from cs2d
 		try (AccessSource source = SpyAccess.MAP.access())
@@ -144,7 +154,10 @@ public class Main
 
 		// check for update
 		System.out.println("Current version: " + VersionManager.getCurrentVersion());
-		version = Optional.of(VersionManager.get().blockingDownloadVersion());
+		if (Settings.get().key("Client.UpdateCheck").getBoolean())
+		{
+			version = Optional.of(VersionManager.get().blockingDownloadVersion());
+		}
 	}
 
 	private static class ApplicationGui implements AwtWindow.DrawListener

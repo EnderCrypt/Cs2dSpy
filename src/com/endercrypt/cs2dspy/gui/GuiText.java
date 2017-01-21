@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import com.endercrypt.cs2dspy.setting.Settings;
+
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
  *
@@ -27,13 +29,17 @@ import java.util.Deque;
 public class GuiText
 {
 	private static final int PADDING_WIDTH = 2;
-	private static final Color backgroundColor = new Color(255, 255, 255, 100);
+	private Color backgroundColor;// = new Color(255, 255, 255, 100);
 	private Deque<Text> texts = new ArrayDeque<>();
+
+	public GuiText()
+	{
+		backgroundColor = Settings.get().key("Client.GuiTextBgColor").colorArgs(100);
+	}
 
 	public void addText(String text, Color color)
 	{
 		addText(new Text(text, color));
-
 	}
 
 	public void addText(Text... textValues)

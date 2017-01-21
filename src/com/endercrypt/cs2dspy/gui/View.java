@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard.BindType;
+import com.endercrypt.cs2dspy.setting.Settings;
 import com.endercrypt.library.position.Motion;
 import com.endercrypt.library.position.Position;
 
@@ -30,8 +31,8 @@ import com.endercrypt.library.position.Position;
  */
 public class View
 {
-	public static final double VIEW_SPEED = 5;
-	public static final double ZOOM_SPEED = 0.01;
+	public double viewSpeed;
+	//public double ZOOM_SPEED;
 
 	private Position position;
 	private Motion motion;
@@ -40,18 +41,24 @@ public class View
 	private double zoomMotion = 0.0;
 	*/
 
+	public View()
+	{
+		viewSpeed = Settings.get().key("Client.CameraSpeed").getDouble();
+	}
+
 	public View(Position position)
 	{
+		this();
 		this.position = position;
 		motion = new Motion();
 	}
 
 	public void bindMovementKeys(Keyboard keyboard)
 	{
-		keyboard.bindKey(KeyEvent.VK_A, BindType.HOLD, (keyCode, bindType) -> motion.x -= VIEW_SPEED);
-		keyboard.bindKey(KeyEvent.VK_D, BindType.HOLD, (keyCode, bindType) -> motion.x += VIEW_SPEED);
-		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= VIEW_SPEED);
-		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += VIEW_SPEED);
+		keyboard.bindKey(KeyEvent.VK_A, BindType.HOLD, (keyCode, bindType) -> motion.x -= viewSpeed);
+		keyboard.bindKey(KeyEvent.VK_D, BindType.HOLD, (keyCode, bindType) -> motion.x += viewSpeed);
+		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= viewSpeed);
+		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += viewSpeed);
 		/*
 		keyboard.bindKey(KeyEvent.VK_Q, BindType.HOLD, (keyCode, bindType) -> zoomMotion += ZOOM_SPEED);
 		keyboard.bindKey(KeyEvent.VK_E, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= ZOOM_SPEED);

@@ -1,0 +1,6 @@
+// Window dimension
+Window.width = 1000
+Window.height = 100
+
+// Cs2d
+Cs2d.updateFrequency = 5
