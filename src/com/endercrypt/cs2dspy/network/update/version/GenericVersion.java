@@ -8,8 +8,8 @@ import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
 
 public class GenericVersion implements Version
 {
-	private String message;
-	private Color color;
+	protected String message;
+	protected Color color;
 
 	public GenericVersion(String message, Color color)
 	{
