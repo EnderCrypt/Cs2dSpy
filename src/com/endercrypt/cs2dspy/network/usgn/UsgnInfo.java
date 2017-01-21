@@ -43,10 +43,10 @@ public class UsgnInfo
 
 	public void addInfo(Consumer<String> infoConsumer)
 	{
-		infoConsumer.accept("{");
-		infoConsumer.accept(" Username: " + name);
-		infoConsumer.accept(" Country: " + prefferedLanguage);
-		infoConsumer.accept(" Days Registered: " + daysRegistered);
-		infoConsumer.accept("}");
+		//infoConsumer.accept("{");
+		infoConsumer.accept("┣ Username: " + name);
+		infoConsumer.accept("┣ Country: " + prefferedLanguage);
+		infoConsumer.accept("┗ Days Registered: " + daysRegistered);
+		//infoConsumer.accept("}");
 	}
 }

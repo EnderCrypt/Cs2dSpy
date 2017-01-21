@@ -136,7 +136,7 @@ public class SpyPlayer
 		for (String line : info)
 		{
 			g2d.drawString(line, position.x + 2, yScroll);
-			yScroll += fontMetrics.getHeight();
+			yScroll += fontMetrics.getHeight() - fontMetrics.getDescent();
 		}
 
 		g2d.drawRect(position.x, position.y, infoSize.width, infoSize.height);
@@ -194,7 +194,7 @@ public class SpyPlayer
 
 		private int getHeight(FontMetrics fontMetrics)
 		{
-			return fontMetrics.getHeight() * lines.size();
+			return (fontMetrics.getHeight() - fontMetrics.getDescent()) * lines.size() + 4;
 		}
 
 		public Dimension getInfoDimension(FontMetrics fontMetrics)
