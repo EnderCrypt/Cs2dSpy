@@ -1,17 +1,11 @@
 package com.endercrypt.cs2dspy.gui.splash;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import com.endercrypt.cs2dspy.gui.AwtWindow;
-import com.endercrypt.cs2dspy.gui.AwtWindow.DrawListener;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
