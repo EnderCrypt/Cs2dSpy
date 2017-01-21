@@ -1,6 +1,6 @@
 Cs2dSpy = {}
 Cs2dSpy.baseDirectory = "sys/lua/Cs2dSpy/"
-Cs2dSpy.linkDirectory = Cs2dSpy.baseDirectory.."access/"
+Cs2dSpy.linkDirectory = Cs2dSpy.baseDirectory.."Access/"
 Cs2dSpy.linkFileType = "link"
 Cs2dSpy.relativeJarCs2dDirectory = "../../../" -- relative directory to cs2d main folder from the jar (opposite of Cs2dSpy.baseDirectory)
 Cs2dSpy.updateFrequency = 5 -- every X frame
