@@ -2,7 +2,6 @@ package com.endercrypt.cs2dspy.setting;
 
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.stream.Collector;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
