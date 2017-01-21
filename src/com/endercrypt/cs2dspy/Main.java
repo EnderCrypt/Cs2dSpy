@@ -2,7 +2,10 @@ package com.endercrypt.cs2dspy;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
@@ -60,6 +63,7 @@ public class Main
 	private static SpyRealtime realtime;
 	private static Spectate spectate;
 	private static Optional<Version> version = Optional.empty();
+	private static Font font;
 
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
@@ -74,6 +78,20 @@ public class Main
 
 		// create window
 		window = new AwtWindow("Cs2d Spy Client", screenSize, new ApplicationGui());
+
+		// set font
+		String fontName = settings.key("Client.FontName").getString();
+		int fontSize = settings.key("Client.FontSize").getInteger();
+		font = window.getJFrame().getFont();
+		for (String existingFontName : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames())
+		{
+			if (existingFontName.equals(fontName))
+			{
+				System.out.println("Using font from settings: " + fontName + " (" + fontSize + " px)");
+				font = new Font(fontName, Font.PLAIN, fontSize);
+			}
+		}
+		System.out.println("Font: " + font);
 
 		// read in map data from cs2d
 		try (AccessSource source = SpyAccess.MAP.access())
@@ -172,6 +190,7 @@ public class Main
 		@Override
 		public void onDraw(Graphics2D g2d, Dimension guiScreenSize)
 		{
+			g2d.setFont(font);
 			Graphics2D hudG2d = (Graphics2D) g2d.create();
 			screenSize = guiScreenSize;
 
@@ -224,13 +243,14 @@ public class Main
 		private void drawHud(Graphics2D g2d)
 		{
 			g2d.setColor(Color.BLACK);
+			FontMetrics fontMetrics = g2d.getFontMetrics();
 			// draw mouse position
 			GuiText guiLocationText = new GuiText();
 			guiLocationText.addText(Math.round(mapMousePosition.x) + ", " + Math.round(mapMousePosition.y) + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
 			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10);
 
 			// draw version info
-			version.ifPresent((v) -> v.draw(g2d, 10, 30, Alignment.RIGHT));
+			version.ifPresent((v) -> v.draw(g2d, 10, 10 + fontMetrics.getDescent() + fontMetrics.getHeight(), Alignment.RIGHT));
 
 			// draw data about player near mouse
 			hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
