@@ -1,6 +1,15 @@
-// Window dimension
-Window.width = 1000
-Window.height = 100
+// Client
+Client.Width = 1000
+Client.Height = 500
+Client.Fps = 50
+Client.CameraSpeed = 5.0
+Client.GuiTextBgColor = 255, 255, 255, 100
+Client.UpdateCheck = True
 
 // Cs2d
-Cs2d.updateFrequency = 5
+Cs2d.UpdateFrequency = 1
+Cs2d.ChatSize = 10
+
+// Directories
+Directory.AccessFolder = Access
+Directory.LinkExtension = Link
