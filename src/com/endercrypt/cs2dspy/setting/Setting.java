@@ -69,7 +69,7 @@ public class Setting
 		int r = colors[0];
 		int g = colors[1];
 		int b = colors[2];
-		int a = 0;
+		int a = defaultAlpha;
 		if (colors.length > 3)
 			a = colors[3];
 
