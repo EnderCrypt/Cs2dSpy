@@ -93,7 +93,6 @@ public class MasterTileset
 	public Tileset getZoomTileset(double zoom)
 	{
 		int zoomIndex = (int) Math.min(zoom, PRE_SCALES) - 1;
-		System.out.println(zoomIndex);
 		return getScaledTileset(zoomIndex);
 	}
 
