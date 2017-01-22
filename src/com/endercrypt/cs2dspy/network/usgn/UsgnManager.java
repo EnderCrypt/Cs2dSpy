@@ -30,7 +30,6 @@ public class UsgnManager
 
 	private static boolean fetchExternalUsgnData = Settings.get().key("Cs2d.FetchExternalUsgnData").getBoolean();
 
-
 	public Optional<UsgnInfo> get(int usgn)
 	{
 		if (fetchExternalUsgnData == false)
