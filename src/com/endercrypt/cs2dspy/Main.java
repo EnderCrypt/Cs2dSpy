@@ -252,13 +252,18 @@ public class Main
 		{
 			g2d.setColor(Color.BLACK);
 			FontMetrics fontMetrics = g2d.getFontMetrics();
+			int yAdd = fontMetrics.getDescent() + fontMetrics.getHeight();
 			// draw mouse position
 			GuiText guiLocationText = new GuiText();
 			guiLocationText.addText(Math.round(mapMousePosition.x) + ", " + Math.round(mapMousePosition.y) + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
-			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10);
+			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10 + (yAdd * 0));
+
+			GuiText guiZoomText = new GuiText();
+			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% zoom", Color.BLACK);
+			guiZoomText.draw(g2d, Alignment.RIGHT, 10, 10 + (yAdd * 1));
 
 			// draw version info
-			version.ifPresent((v) -> v.draw(g2d, 10, 10 + fontMetrics.getDescent() + fontMetrics.getHeight(), Alignment.RIGHT));
+			version.ifPresent((v) -> v.draw(g2d, 10, 10 + (yAdd * 2), Alignment.RIGHT));
 
 			// draw data about player near mouse
 			hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
