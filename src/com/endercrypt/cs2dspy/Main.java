@@ -203,8 +203,8 @@ public class Main
 			spectPlayer.ifPresent((player) -> view.setPosition(player.getPosition()));
 
 			// draw content
-			map.draw(g2d, view, screenSize);
 			view.translate(g2d, screenSize);
+			map.draw(g2d, view, screenSize);
 			if (realtime != null)
 			{
 				realtime.draw(g2d);

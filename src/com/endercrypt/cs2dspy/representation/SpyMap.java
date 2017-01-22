@@ -88,8 +88,8 @@ public class SpyMap
 		int yPosition = (int) Math.floor(viewPosition.y / Tileset.TILE_SIZE);
 
 		// the exact x/y pixel position where tiles should be drawn onto the screen
-		int xStart = (int) Math.floor(xPosition * Tileset.TILE_SIZE - viewPosition.x);
-		int yStart = (int) Math.floor(yPosition * Tileset.TILE_SIZE - viewPosition.y);
+		int xStart = (int) (viewPosition.x + Math.floor(xPosition * Tileset.TILE_SIZE - viewPosition.x));
+		int yStart = (int) (viewPosition.y + Math.floor(yPosition * Tileset.TILE_SIZE - viewPosition.y));
 
 		for (int y = 0; y < yTiles; y++)
 		{
