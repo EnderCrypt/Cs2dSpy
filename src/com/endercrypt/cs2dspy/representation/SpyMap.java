@@ -2,12 +2,13 @@ package com.endercrypt.cs2dspy.representation;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.gui.View;
+import com.endercrypt.cs2dspy.representation.map.MasterTileset;
 import com.endercrypt.cs2dspy.representation.map.Tileset;
 import com.endercrypt.library.position.Position;
 
@@ -31,7 +32,7 @@ import com.endercrypt.library.position.Position;
  */
 public class SpyMap
 {
-	private Tileset tileset;
+	private MasterTileset masterTileset;
 
 	private Dimension mapSize;
 	private byte[][] map;
@@ -39,7 +40,7 @@ public class SpyMap
 	public SpyMap(AccessSource source) throws IOException
 	{
 		// line 1
-		tileset = new Tileset(System.getProperty("user.dir") + "/" + source.read());
+		masterTileset = new MasterTileset(System.getProperty("user.dir") + "/" + source.read());
 
 		// line 2
 		int mapWidth = source.readInt();
@@ -76,20 +77,22 @@ public class SpyMap
 
 	public void draw(Graphics2D g2d, View view, Dimension screenSize)
 	{
+		Tileset zoomedTileset = masterTileset.getZoomTileset(view.getZoom());
+
 		Position viewPosition = view.getPosition();
 		viewPosition.x -= (screenSize.width / 2) * view.getZoom();
 		viewPosition.y -= (screenSize.height / 2) * view.getZoom();
 
-		int xTiles = (int) (view.getZoom() * (screenSize.getWidth() / Tileset.TILE_SIZE) + 2);
-		int yTiles = (int) (view.getZoom() * (screenSize.getHeight() / Tileset.TILE_SIZE) + 2);
+		int xTiles = (int) (view.getZoom() * (screenSize.getWidth() / MasterTileset.TILE_SIZE) + 2);
+		int yTiles = (int) (view.getZoom() * (screenSize.getHeight() / MasterTileset.TILE_SIZE) + 2);
 
 		// which tile on tiles[x][y] the x/y loop starts at
-		int xPosition = (int) Math.floor(viewPosition.x / Tileset.TILE_SIZE);
-		int yPosition = (int) Math.floor(viewPosition.y / Tileset.TILE_SIZE);
+		int xPosition = (int) Math.floor(viewPosition.x / MasterTileset.TILE_SIZE);
+		int yPosition = (int) Math.floor(viewPosition.y / MasterTileset.TILE_SIZE);
 
 		// the exact x/y pixel position where tiles should be drawn onto the screen
-		int xStart = (int) (viewPosition.x + Math.floor(xPosition * Tileset.TILE_SIZE - viewPosition.x));
-		int yStart = (int) (viewPosition.y + Math.floor(yPosition * Tileset.TILE_SIZE - viewPosition.y));
+		int xStart = (int) (viewPosition.x + Math.floor(xPosition * MasterTileset.TILE_SIZE - viewPosition.x));
+		int yStart = (int) (viewPosition.y + Math.floor(yPosition * MasterTileset.TILE_SIZE - viewPosition.y));
 
 		for (int y = 0; y < yTiles; y++)
 		{
@@ -102,8 +105,8 @@ public class SpyMap
 				int px = xStart + (x * 32);
 				int py = yStart + (y * 32);
 				byte frame = getFrame(rx, ry);
-				BufferedImage tile = tileset.frame(frame);
-				g2d.drawImage(tile, px, py, null);
+				Image tile = zoomedTileset.frame(frame);
+				g2d.drawImage(tile, px, py, 32, 32, null);
 			}
 		}
 	}
