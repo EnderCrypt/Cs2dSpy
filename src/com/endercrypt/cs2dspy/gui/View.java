@@ -32,14 +32,13 @@ import com.endercrypt.library.position.Position;
 public class View
 {
 	public double viewSpeed;
-	//public double ZOOM_SPEED;
+	public double ZOOM_SPEED = 1.0;
 
 	private Position position;
 	private Motion motion;
-	/*
+
 	private double zoom = 1.0;
 	private double zoomMotion = 0.0;
-	*/
 
 	public View()
 	{
@@ -59,10 +58,9 @@ public class View
 		keyboard.bindKey(KeyEvent.VK_D, BindType.HOLD, (keyCode, bindType) -> motion.x += viewSpeed);
 		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= viewSpeed);
 		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += viewSpeed);
-		/*
-		keyboard.bindKey(KeyEvent.VK_Q, BindType.HOLD, (keyCode, bindType) -> zoomMotion += ZOOM_SPEED);
-		keyboard.bindKey(KeyEvent.VK_E, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= ZOOM_SPEED);
-		*/
+
+		keyboard.bindKey(KeyEvent.VK_R, BindType.HOLD, (keyCode, bindType) -> zoomMotion += ZOOM_SPEED);
+		keyboard.bindKey(KeyEvent.VK_F, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= ZOOM_SPEED);
 	}
 
 	public void update()
@@ -70,26 +68,23 @@ public class View
 		// move
 		position.add(motion);
 		motion.multiplyLength(0.8);
-		/*
-				// zoom
-				zoom += zoomMotion;
-				zoomMotion *= 0.9;
-				if (zoom < 1)
-					zoom = 1;
-					*/
+
+		// zoom
+		zoom += zoomMotion;
+		zoomMotion *= 0.9;
+		if (zoom < 1)
+			zoom = 1;
 	}
 
-	/*
-		public double getZoom()
-		{
-			return zoom;
-		}
-	
+	public double getZoom()
+	{
+		return zoom;
+	}
+
 	public double getDividedZoom()
 	{
 		return 1.0 / getZoom();
 	}
-	*/
 
 	public void translate(Graphics2D g2d, Dimension screenSize)
 	{
