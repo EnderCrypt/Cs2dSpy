@@ -34,26 +34,47 @@ public class SplashGui implements DrawListener
 		g2d.setColor(new Color(200, 200, 255));
 		g2d.fillRect(0, 0, screenSize.width, screenSize.height);
 		g2d.setColor(Color.BLACK);
-		int location = 2;
-		drawCentered(g2d, "Cs2d Spy Version " + VersionManager.getCurrentVersion().toString("."), screenSize.width / 2, 16 * location);
-		location++;
-		drawCentered(g2d, "Created By EnderCrypt (Magnus G)", screenSize.width / 2, 16 * location);
-		location++;
-		drawCentered(g2d, "U.S.G.N: 5783", screenSize.width / 2, 16 * location);
-		location++;
-		drawCentered(g2d, "https://github.com/EnderCrypt/Cs2dSpy", screenSize.width / 2, 16 * location);
-		location += 5;
-		drawCentered(g2d, "License", screenSize.width / 2, 16 * location);
-		location++;
-		drawCentered(g2d, "GNU General Public License v3", screenSize.width / 2, 16 * location);
-		location++;
-		drawCentered(g2d, "Read LICENSE.txt for further info", screenSize.width / 2, 16 * location);
+		SplashPrinter printer = new SplashPrinter(g2d, screenSize.width / 2, 20);
+		printer.println("Cs2d Spy Version " + VersionManager.getCurrentVersion().toString("."));
+		printer.println("Created By EnderCrypt (Magnus G)");
+		printer.println("U.S.G.N: 5783");
+		printer.println("https://github.com/EnderCrypt/Cs2dSpy");
+		printer.skipln(3);
+		printer.println("License");
+		printer.println("GNU General Public License v3");
+		printer.println("Read LICENSE.txt for further info");
 	}
 
-	private static void drawCentered(Graphics2D g2d, String text, int x, int y)
+	private class SplashPrinter
 	{
-		FontMetrics fontMetrics = g2d.getFontMetrics();
-		int stringWidth = fontMetrics.stringWidth(text);
-		g2d.drawString(text, x - (stringWidth / 2), y);
+		private final Graphics2D g2d;
+		private final FontMetrics fontMetrics;
+		private int x;
+		private int y;
+
+		protected SplashPrinter(Graphics2D g2d, int x, int y)
+		{
+			this.g2d = g2d;
+			this.fontMetrics = g2d.getFontMetrics();
+			this.x = x;
+			this.y = y;
+		}
+
+		public void skipln()
+		{
+			skipln(1);
+		}
+
+		public void skipln(int times)
+		{
+			y += (fontMetrics.getHeight() + 2) * times;
+		}
+
+		public void println(String text)
+		{
+			int xPos = x - (fontMetrics.stringWidth(text) / 2);
+			g2d.drawString(text, xPos, y);
+			skipln();
+		}
 	}
 }
