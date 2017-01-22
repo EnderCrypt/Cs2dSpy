@@ -218,26 +218,34 @@ public class Main
 			drawHud(hudG2d);
 		}
 
-		private Position generateHudPosition(Position position)
+		private Position generateHudPosition(Position mapPosition)
 		{
-			position = position.getLocation();
-			position.x += screenSize.width / 2;
-			position.y += screenSize.height / 2;
 			Position viewPosition = view.getPosition();
-			position.x -= viewPosition.x;
-			position.y -= viewPosition.y;
-			return position;
+			Position hudPosition = new Position(0, 0);
+
+			hudPosition.x += (screenSize.width / 2);
+			hudPosition.y += (screenSize.height / 2);
+
+			hudPosition.x += (mapPosition.x - viewPosition.x) * view.getDividedZoom();
+			hudPosition.y += (mapPosition.y - viewPosition.y) * view.getDividedZoom();
+
+			return hudPosition;
 		}
 
-		private Position generateMapPosition(Position position)
+		private Position generateMapPosition(Position hudPosition)
 		{
-			position = position.getLocation();
-			position.x -= screenSize.width / 2;
-			position.y -= screenSize.height / 2;
 			Position viewPosition = view.getPosition();
-			position.x += viewPosition.x;
-			position.y += viewPosition.y;
-			return position;
+			Position mapPosition = new Position(0, 0);
+
+			mapPosition.x -= (screenSize.width / 2) * view.getZoom();
+			mapPosition.y -= (screenSize.height / 2) * view.getZoom();
+
+			mapPosition.x += hudPosition.x * view.getZoom();
+			mapPosition.y += hudPosition.y * view.getZoom();
+
+			mapPosition.x += viewPosition.x;
+			mapPosition.y += viewPosition.y;
+			return mapPosition;
 		}
 
 		private void drawHud(Graphics2D g2d)

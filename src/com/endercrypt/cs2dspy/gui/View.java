@@ -32,7 +32,7 @@ import com.endercrypt.library.position.Position;
 public class View
 {
 	public double viewSpeed;
-	public double ZOOM_SPEED = 1.0;
+	public double ZOOM_SPEED = 0.05;
 
 	private Position position;
 	private Motion motion;
@@ -54,10 +54,10 @@ public class View
 
 	public void bindMovementKeys(Keyboard keyboard)
 	{
-		keyboard.bindKey(KeyEvent.VK_A, BindType.HOLD, (keyCode, bindType) -> motion.x -= viewSpeed);
-		keyboard.bindKey(KeyEvent.VK_D, BindType.HOLD, (keyCode, bindType) -> motion.x += viewSpeed);
-		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= viewSpeed);
-		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += viewSpeed);
+		keyboard.bindKey(KeyEvent.VK_A, BindType.HOLD, (keyCode, bindType) -> motion.x -= viewSpeed * zoom);
+		keyboard.bindKey(KeyEvent.VK_D, BindType.HOLD, (keyCode, bindType) -> motion.x += viewSpeed * zoom);
+		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= viewSpeed * zoom);
+		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += viewSpeed * zoom);
 
 		keyboard.bindKey(KeyEvent.VK_R, BindType.HOLD, (keyCode, bindType) -> zoomMotion += ZOOM_SPEED);
 		keyboard.bindKey(KeyEvent.VK_F, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= ZOOM_SPEED);
@@ -71,9 +71,11 @@ public class View
 
 		// zoom
 		zoom += zoomMotion;
-		zoomMotion *= 0.9;
+		zoomMotion *= 0.75;
 		if (zoom < 1)
 			zoom = 1;
+		if (zoom > 5)
+			zoom = 5;
 	}
 
 	public double getZoom()
@@ -89,8 +91,9 @@ public class View
 	public void translate(Graphics2D g2d, Dimension screenSize)
 	{
 		AffineTransform transform = new AffineTransform();
+		transform.scale(getDividedZoom(), getDividedZoom());
 		transform.translate(-position.x, -position.y);
-		transform.translate((screenSize.width / 2), (screenSize.height / 2));
+		transform.translate((screenSize.width / 2) * getZoom(), (screenSize.height / 2) * getZoom());
 		g2d.transform(transform);
 	}
 

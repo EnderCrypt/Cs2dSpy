@@ -77,11 +77,11 @@ public class SpyMap
 	public void draw(Graphics2D g2d, View view, Dimension screenSize)
 	{
 		Position viewPosition = view.getPosition();
-		viewPosition.x -= (screenSize.width / 2);
-		viewPosition.y -= (screenSize.height / 2);
+		viewPosition.x -= (screenSize.width / 2) * view.getZoom();
+		viewPosition.y -= (screenSize.height / 2) * view.getZoom();
 
-		int xTiles = (int) ((screenSize.getWidth() / Tileset.TILE_SIZE) + 2);
-		int yTiles = (int) ((screenSize.getHeight() / Tileset.TILE_SIZE) + 2);
+		int xTiles = (int) (view.getZoom() * (screenSize.getWidth() / Tileset.TILE_SIZE) + 2);
+		int yTiles = (int) (view.getZoom() * (screenSize.getHeight() / Tileset.TILE_SIZE) + 2);
 
 		// which tile on tiles[x][y] the x/y loop starts at
 		int xPosition = (int) Math.floor(viewPosition.x / Tileset.TILE_SIZE);
