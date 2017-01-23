@@ -59,7 +59,6 @@ public class AwtWindow
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
 				FpsFrame frame = new FpsFrame();
-				g2d.drawString("", 0, 0); // java bug causes delays first time drawing string, might aswell do it as early as possible
 				Dimension screenSize = getSize();
 				listener.onDraw(g2d, screenSize);
 				fpsCounter.add(frame);
