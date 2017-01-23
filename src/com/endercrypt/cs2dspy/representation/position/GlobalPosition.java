@@ -56,7 +56,7 @@ public class GlobalPosition
 	{
 		this.hudPosition = hudPosition;
 		this.mapPosition = mapPosition;
-		this.tilePosition = new Point((int) (mapPosition.x / 32), (int) (mapPosition.y / 32));
+		this.tilePosition = new Point((int) Math.floor(mapPosition.x / 32), (int) Math.floor(mapPosition.y / 32));
 	}
 
 	// map //

@@ -1,9 +1,7 @@
 package com.endercrypt.cs2dspy.network.update.version;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-
-import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -38,19 +36,21 @@ public class SameVersion extends GenericVersion
 	}
 
 	@Override
-	public void draw(Graphics2D g2d, int x, int y, Alignment alignment)
+	public GuiText generateGuiText()
 	{
 		alpha -= 0.005;
+		/*
 		double xBack = (0.25 - alpha);
 		if (xBack < 0)
 			xBack = 0;
 		xBack = (xBack / 0.25) * 20;
 		xBack *= xBack;
 		x -= (int) xBack;
+		*/
 		if (alpha > 0)
 		{
-			color = getColor(alpha);
-			super.draw(g2d, x, y, alignment);
+			super.color = getColor(alpha);
 		}
+		return super.generateGuiText();
 	}
 }

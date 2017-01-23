@@ -1,12 +1,10 @@
 package com.endercrypt.cs2dspy.representation.chat;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.io.IOException;
 
 import com.endercrypt.cs2dspy.AccessSource;
-import com.endercrypt.cs2dspy.gui.GuiText;
-import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
 import com.endercrypt.cs2dspy.representation.realtime.Team;
 
 /**
@@ -62,8 +60,8 @@ public class ChatMessage
 		return message;
 	}
 
-	public void draw(Graphics2D g2d, int x, int y)
+	public GuiText getGuiText()
 	{
-		guiText.draw(g2d, Alignment.RIGHT, x, y);
+		return guiText;
 	}
 }

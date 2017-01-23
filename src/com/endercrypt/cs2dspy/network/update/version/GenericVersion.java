@@ -1,10 +1,7 @@
 package com.endercrypt.cs2dspy.network.update.version;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-
-import com.endercrypt.cs2dspy.gui.GuiText;
-import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -36,10 +33,10 @@ public class GenericVersion implements Version
 	}
 
 	@Override
-	public void draw(Graphics2D g2d, int x, int y, Alignment alignment)
+	public GuiText generateGuiText()
 	{
 		GuiText guiText = new GuiText();
 		guiText.addText(message, color);
-		guiText.draw(g2d, alignment, x, y);
+		return guiText;
 	}
 }

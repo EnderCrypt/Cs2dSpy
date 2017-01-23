@@ -1,4 +1,4 @@
-package com.endercrypt.cs2dspy.gui;
+package com.endercrypt.cs2dspy.gui.text;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -35,6 +35,12 @@ public class GuiText
 	public GuiText()
 	{
 		backgroundColor = Settings.get().key("Client.GuiTextBgColor").colorArgs(100);
+	}
+
+	public GuiText(String text, Color color)
+	{
+		this();
+		addText(text, color);
 	}
 
 	public void addText(String text, Color color)

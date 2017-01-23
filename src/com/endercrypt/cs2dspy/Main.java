@@ -3,7 +3,6 @@ package com.endercrypt.cs2dspy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
@@ -18,11 +17,13 @@ import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 
 import com.endercrypt.cs2dspy.gui.AwtWindow;
-import com.endercrypt.cs2dspy.gui.GuiText;
-import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
 import com.endercrypt.cs2dspy.gui.View;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
 import com.endercrypt.cs2dspy.gui.splash.SplashWindow;
+import com.endercrypt.cs2dspy.gui.text.GuiPrinter;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
+import com.endercrypt.cs2dspy.gui.text.GuiPrinter.Direction;
+import com.endercrypt.cs2dspy.gui.text.GuiText.Alignment;
 import com.endercrypt.cs2dspy.network.update.VersionManager;
 import com.endercrypt.cs2dspy.network.update.version.Version;
 import com.endercrypt.cs2dspy.representation.SpyMap;
@@ -218,13 +219,17 @@ public class Main
 		private void drawHud(Graphics2D g2d)
 		{
 			g2d.setColor(Color.BLACK);
-			FontMetrics fontMetrics = g2d.getFontMetrics();
 
-			int leftHudY = (fontMetrics.getDescent() + fontMetrics.getHeight());
-			drawMousePositionInfo(g2d, leftHudY);
-
-			leftHudY += (fontMetrics.getDescent() + fontMetrics.getHeight());
-			drawVersionInfo(g2d, leftHudY);
+			GuiPrinter infoHud = new GuiPrinter.Builder()
+					.setPosition(10, 10)
+					.setPadding(5)
+					.setDirection(Direction.DOWN)
+					.setTextAlignment(GuiText.Alignment.RIGHT)
+					.build();
+			drawMousePositionInfo(infoHud);
+			drawScaleInfo(infoHud);
+			drawVersionInfo(infoHud);
+			infoHud.draw(g2d);
 
 			drawHoverPlayerData(g2d);
 
@@ -233,22 +238,31 @@ public class Main
 			drawSpectatingInfo(g2d);
 		}
 
-		private void drawMousePositionInfo(Graphics2D g2d, int y)
+		private void drawMousePositionInfo(GuiPrinter printer)
 		{
 			GuiText guiLocationText = new GuiText();
 			Position mousePixel = mousePosition.getMapPosition();
 			Point mouseTile = mousePosition.getTilePosition();
 			guiLocationText.addText(Math.round(mousePixel.x) + ", " + Math.round(mousePixel.y) + " (" + mouseTile.x + "|" + mouseTile.y + ")", Color.BLACK);
-			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10 + (y * 0));
 
-			GuiText guiZoomText = new GuiText();
-			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% Scale", Color.BLACK);
-			guiZoomText.draw(g2d, Alignment.RIGHT, 10, 10 + (y * 1));
+			printer.add(guiLocationText);
 		}
 
-		private void drawVersionInfo(Graphics2D g2d, int y)
+		private static void drawScaleInfo(GuiPrinter printer)
 		{
-			version.ifPresent((v) -> v.draw(g2d, 10, 10 + (y * 2), Alignment.RIGHT));
+			GuiText guiZoomText = new GuiText();
+			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% Scale", Color.BLACK);
+
+			printer.add(guiZoomText);
+		}
+
+		private static void drawVersionInfo(GuiPrinter printer)
+		{
+			if (version.isPresent())
+			{
+				GuiText guiText = version.get().generateGuiText();
+				printer.add(guiText);
+			}
 		}
 
 		private void drawHoverPlayerData(Graphics2D g2d)

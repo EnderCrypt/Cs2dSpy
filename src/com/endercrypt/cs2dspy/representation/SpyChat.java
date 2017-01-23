@@ -8,6 +8,9 @@ import java.util.Deque;
 import java.util.Iterator;
 
 import com.endercrypt.cs2dspy.AccessSource;
+import com.endercrypt.cs2dspy.gui.text.GuiPrinter;
+import com.endercrypt.cs2dspy.gui.text.GuiPrinter.Direction;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
 import com.endercrypt.cs2dspy.representation.chat.ChatMessage;
 
 /**
@@ -49,12 +52,18 @@ public class SpyChat implements Iterable<ChatMessage>
 
 	public void draw(Graphics2D g2d, Dimension screenSize)
 	{
-		int y = screenSize.height - 5;
-		int height = g2d.getFontMetrics().getHeight();
+		GuiPrinter chatPrinter = new GuiPrinter.Builder()
+				.setPosition(5, screenSize.height - 5)
+				.setPadding(0)
+				.setDirection(Direction.UP)
+				.setTextAlignment(GuiText.Alignment.RIGHT)
+				.build();
+
 		for (ChatMessage chatMessage : this)
 		{
-			y -= height;
-			chatMessage.draw(g2d, 5, y);
+			chatPrinter.add(chatMessage.getGuiText());
 		}
+
+		chatPrinter.draw(g2d);
 	}
 }

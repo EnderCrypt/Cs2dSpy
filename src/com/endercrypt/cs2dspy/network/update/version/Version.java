@@ -2,7 +2,8 @@ package com.endercrypt.cs2dspy.network.update.version;
 
 import java.awt.Graphics2D;
 
-import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
+import com.endercrypt.cs2dspy.gui.text.GuiText.Alignment;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -24,5 +25,11 @@ import com.endercrypt.cs2dspy.gui.GuiText.Alignment;
  */
 public interface Version
 {
-	public void draw(Graphics2D g2d, int x, int y, Alignment alignment);
+	public GuiText generateGuiText();
+
+	default void draw(Graphics2D g2d, Alignment alignment, int x, int y)
+	{
+		GuiText guiText = generateGuiText();
+		guiText.draw(g2d, alignment, x, y);
+	}
 }
