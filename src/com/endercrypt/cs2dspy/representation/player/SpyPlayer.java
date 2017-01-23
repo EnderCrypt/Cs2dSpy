@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -57,7 +55,6 @@ public class SpyPlayer
 	private final double rotation;
 	private final Health health;
 	private final Team team;
-	private final int look;
 	private final int money;
 	private final int score;
 	private final int death;
@@ -80,7 +77,6 @@ public class SpyPlayer
 		rotation = Math.toRadians(source.readDouble() - 90);
 		health = new Health(source);
 		team = Team.parse(source.readInt());
-		look = source.readInt();
 		money = source.readInt();
 		score = source.readInt();
 		death = source.readInt();
@@ -110,42 +106,6 @@ public class SpyPlayer
 	}
 
 	public void draw(Graphics2D g2d)
-	{
-		if (Settings.get().key("Client.RealPlayerGraphics").getBoolean())
-		{
-			drawRealPlayerGfx(g2d);
-		}
-		else
-		{
-			drawAbstractPlayerGfx(g2d);
-		}
-	}
-
-	private void drawRealPlayerGfx(Graphics2D g2d)
-	{
-		// player
-		Image playerImage = PlayerGfx.get().team(team).look(look);
-
-		AffineTransform playerTransform = new AffineTransform();
-		playerTransform.translate(x - 16.0, y - 16.0);
-		playerTransform.rotate(rotation + (Math.PI / 2), 16, 16);
-		g2d.drawImage(playerImage, playerTransform, null);
-
-		// weapon
-		Weapon weapon = WeaponInfo.getInstance().weapon(weaponType);
-		Optional<Image> weaponImageOptional = weapon.getGfx();
-		if (weaponImageOptional.isPresent())
-		{
-			Image weaponImage = weaponImageOptional.get();
-
-			AffineTransform weaponTransform = new AffineTransform();
-			weaponTransform.translate(x - 16.0, y - 16.0);
-			weaponTransform.rotate(rotation + (Math.PI / 2), 16, 16);
-			g2d.drawImage(weaponImage, weaponTransform, null);
-		}
-	}
-
-	private void drawAbstractPlayerGfx(Graphics2D g2d)
 	{
 		// draw white background
 		g2d.setColor(Color.WHITE);

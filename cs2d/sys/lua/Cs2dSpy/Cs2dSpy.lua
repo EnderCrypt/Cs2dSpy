@@ -11,10 +11,10 @@ Cs2dSpy.updateFrequency = Cs2dSpy.settings.getNumber("Cs2d.UpdateFrequency") -- 
 Cs2dSpy.chatBufferSize = Cs2dSpy.settings.getNumber("Cs2d.ChatSize") -- number of chat messages to keep in link
 
 Cs2dSpy.linkTransfer = {}
+dofile(Cs2dSpy.baseDirectory.."LinkTypes/Realtime.lua")
 dofile(Cs2dSpy.baseDirectory.."LinkTypes/Map.lua")
 dofile(Cs2dSpy.baseDirectory.."LinkTypes/Weapons.lua")
 dofile(Cs2dSpy.baseDirectory.."LinkTypes/Info.lua")
-dofile(Cs2dSpy.baseDirectory.."LinkTypes/RealTime.lua")
 
 Cs2dSpy.linkTransfer.map()
 Cs2dSpy.linkTransfer.weapons()

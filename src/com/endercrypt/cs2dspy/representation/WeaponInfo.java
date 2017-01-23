@@ -1,13 +1,7 @@
 package com.endercrypt.cs2dspy.representation;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
 
-import com.endercrypt.cs2dspy.gui.GraphicsUtil;
 import com.endercrypt.cs2dspy.link.AccessSource;
 import com.endercrypt.cs2dspy.link.SpyAccess;
 
@@ -42,7 +36,6 @@ public class WeaponInfo
 
 	private WeaponInfo()
 	{
-		String weaponGfxDirectory = SpyCs2dInfo.get().getCs2dDirectory("gfx/weapons/");
 		try (AccessSource source = SpyAccess.WEAPONS.access())
 		{
 			weapons = new Weapon[source.readInt()];
@@ -50,7 +43,7 @@ public class WeaponInfo
 			{
 				try
 				{
-					weapons[i] = new Weapon(i + 1, source, weaponGfxDirectory);
+					weapons[i] = new Weapon(i + 1, source);
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -73,28 +66,13 @@ public class WeaponInfo
 	{
 		private int weaponID;
 		private String name;
-		private String gfxName;
-		private Optional<Image> gfx = Optional.empty();
 
-		public Weapon(int weaponID, AccessSource source, String weaponGfxDirectory) throws IOException
+		public Weapon(int weaponID, AccessSource source) throws IOException
 		{
 			this.weaponID = weaponID;
 			name = source.read();
-			gfxName = name.replaceAll("-", "").replaceAll(" ", "").toLowerCase();
 			if (name.equals(""))
 				throw new IllegalArgumentException("Weapon name empty");
-			File weaponGfxFile = getGfxFile(weaponGfxDirectory);
-			if (weaponGfxFile.exists())
-			{
-				BufferedImage image = GraphicsUtil.loadImage(weaponGfxFile);
-				int filterColor = image.getRGB(0, 0);
-				gfx = Optional.of(GraphicsUtil.filterOutColor(image, filterColor));
-			}
-		}
-
-		private File getGfxFile(String weaponGfxDirectory) throws FileNotFoundException
-		{
-			return new File(weaponGfxDirectory + gfxName + ".bmp");
 		}
 
 		public int getID()
@@ -105,11 +83,6 @@ public class WeaponInfo
 		public String getName()
 		{
 			return name;
-		}
-
-		public Optional<Image> getGfx()
-		{
-			return gfx;
 		}
 	}
 }

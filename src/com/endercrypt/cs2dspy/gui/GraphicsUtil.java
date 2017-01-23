@@ -19,20 +19,6 @@ public class GraphicsUtil
 		return optimizeImage(ImageIO.read(file));
 	}
 
-	/*
-	public static Image loadFilteredImage(File file, int filterColor) throws IOException
-	{
-		Image image = optimizeImage(ImageIO.read(file));
-		return filterOutColor(image, filterColor);
-	}
-	
-	public static Image loadFilteredImage(File file, int x, int y) throws IOException
-	{
-		BufferedImage image = optimizeImage(ImageIO.read(file));
-		return filterOutColor(image, image.getRGB(x, y));
-	}
-	*/
-
 	public static <T extends BufferedImage> T optimizeImage(T image)
 	{
 		BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
