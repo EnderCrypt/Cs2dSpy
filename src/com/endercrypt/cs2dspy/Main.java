@@ -246,16 +246,19 @@ public class Main
 
 		private static void drawFpsCounter(GuiPrinter printer)
 		{
-			FpsCounter fpsCounter = window.getFpsCounter();
-			GuiText guiText = new GuiText();
-			guiText.addText("Fps: (", Color.BLACK);
-			guiText.addText(String.valueOf(G_FPS), Color.BLACK);
-			guiText.addText(") ", Color.BLACK);
-			guiText.addText(String.valueOf(fpsCounter.getFps()), Color.BLACK);
-			guiText.addText(" (~", Color.BLACK);
-			guiText.addText(String.valueOf(Math.round(fpsCounter.averageFrameMs())), Color.BLACK);
-			guiText.addText("Ms)", Color.BLACK);
-			printer.add(guiText);
+			if (Settings.get().key("Client.DisplayFps").getBoolean())
+			{
+				FpsCounter fpsCounter = window.getFpsCounter();
+				GuiText guiText = new GuiText();
+				guiText.addText("Fps: (", Color.BLACK);
+				guiText.addText(String.valueOf(G_FPS), Color.BLACK);
+				guiText.addText(") ", Color.BLACK);
+				guiText.addText(String.valueOf(fpsCounter.getFps()), Color.BLACK);
+				guiText.addText(" (~", Color.BLACK);
+				guiText.addText(String.valueOf(Math.round(fpsCounter.averageFrameMs())), Color.BLACK);
+				guiText.addText("Ms)", Color.BLACK);
+				printer.add(guiText);
+			}
 		}
 
 		private void drawMousePositionInfo(GuiPrinter printer)

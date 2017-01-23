@@ -7,6 +7,7 @@ Client.GuiTextBgColor = 255, 255, 255, 100
 Client.UpdateCheck = True
 Client.FontName = DEFAULT_FONT
 Client.FontSize = 13
+Client.DisplayFps = True
 
 // Cs2d
 Cs2d.UpdateFrequency = 1
