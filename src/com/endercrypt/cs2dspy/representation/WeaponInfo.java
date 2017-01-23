@@ -1,20 +1,13 @@
 package com.endercrypt.cs2dspy.representation;
 
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
-import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
-
+import com.endercrypt.cs2dspy.gui.GraphicsUtil;
 import com.endercrypt.cs2dspy.link.AccessSource;
 import com.endercrypt.cs2dspy.link.SpyAccess;
 
@@ -65,7 +58,7 @@ public class WeaponInfo
 				}
 			}
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -93,38 +86,15 @@ public class WeaponInfo
 			File weaponGfxFile = getGfxFile(weaponGfxDirectory);
 			if (weaponGfxFile.exists())
 			{
-				gfx = Optional.of(addTransparancy(new Color(0, 0, 0).getRGB(), readImage(weaponGfxFile)));
+				BufferedImage image = GraphicsUtil.loadImage(weaponGfxFile);
+				int filterColor = image.getRGB(0, 0);
+				gfx = Optional.of(GraphicsUtil.filterOutColor(image, filterColor));
 			}
 		}
 
 		private File getGfxFile(String weaponGfxDirectory) throws FileNotFoundException
 		{
 			return new File(weaponGfxDirectory + gfxName + ".bmp");
-		}
-
-		private BufferedImage readImage(File file) throws IOException
-		{
-			BufferedImage image = ImageIO.read(file);
-			BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-			convertedImage.getGraphics().drawImage(image, 0, 0, null);
-			return convertedImage;
-		}
-
-		private Image addTransparancy(int filterColor, BufferedImage image)
-		{
-			ImageFilter filter = new RGBImageFilter()
-			{
-				@Override
-				public final int filterRGB(int x, int y, int rgb)
-				{
-					if (rgb == filterColor)
-						return 0;
-					return rgb;
-				}
-			};
-
-			ImageProducer imageProducer = new FilteredImageSource(image.getSource(), filter);
-			return Toolkit.getDefaultToolkit().createImage(imageProducer);
 		}
 
 		public int getID()

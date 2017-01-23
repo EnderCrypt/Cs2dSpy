@@ -1,4 +1,4 @@
-package com.endercrypt.cs2dspy.representation.realtime;
+package com.endercrypt.cs2dspy.representation.player;
 
 import java.awt.Color;
 import java.io.IOException;

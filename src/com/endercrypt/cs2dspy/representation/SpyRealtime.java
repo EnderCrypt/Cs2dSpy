@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.endercrypt.cs2dspy.link.AccessSource;
-import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
+import com.endercrypt.cs2dspy.representation.player.SpyPlayer;
 import com.endercrypt.library.position.Position;
 
 /**

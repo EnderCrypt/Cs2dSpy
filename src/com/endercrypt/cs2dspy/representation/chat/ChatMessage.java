@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.endercrypt.cs2dspy.gui.text.GuiText;
 import com.endercrypt.cs2dspy.link.AccessSource;
-import com.endercrypt.cs2dspy.representation.realtime.Team;
+import com.endercrypt.cs2dspy.representation.player.Team;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson

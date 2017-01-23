@@ -2,7 +2,7 @@ package com.endercrypt.cs2dspy.representation;
 
 import java.util.Optional;
 
-import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
+import com.endercrypt.cs2dspy.representation.player.SpyPlayer;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson

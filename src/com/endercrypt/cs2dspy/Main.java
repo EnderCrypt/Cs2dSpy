@@ -31,8 +31,8 @@ import com.endercrypt.cs2dspy.network.update.version.Version;
 import com.endercrypt.cs2dspy.representation.Spectate;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
+import com.endercrypt.cs2dspy.representation.player.SpyPlayer;
 import com.endercrypt.cs2dspy.representation.position.GlobalPosition;
-import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
 import com.endercrypt.cs2dspy.setting.Settings;
 import com.endercrypt.library.position.Position;
 
