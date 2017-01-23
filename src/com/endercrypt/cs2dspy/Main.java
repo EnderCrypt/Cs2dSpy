@@ -259,7 +259,7 @@ public class Main
 			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10 + (yAdd * 0));
 
 			GuiText guiZoomText = new GuiText();
-			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% zoom", Color.BLACK);
+			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% Scale", Color.BLACK);
 			guiZoomText.draw(g2d, Alignment.RIGHT, 10, 10 + (yAdd * 1));
 
 			// draw version info
