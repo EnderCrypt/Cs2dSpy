@@ -25,7 +25,8 @@ public enum SpyAccess
 {
 	WEAPONS("Weapons"),
 	MAP("Map"),
-	REALTIME("Realtime");
+	REALTIME("Realtime"),
+	INFO("Info");
 
 	private final static String extension = "link";
 	private final static String directory = System.getProperty("user.dir") + "/access/";

@@ -1,8 +1,8 @@
 function Cs2dSpy.linkTransfer.map()
 	-- open link
 	local link = Cs2dSpy.openLink("Map")
-	-- relative cs2d path
-	link:write(Cs2dSpy.relativeJarCs2dDirectory.."gfx/tiles/"..map("tileset").."\n")
+	-- write tileset name
+	link:write(map("tileset").."\n")
 	-- write map
 	local xsize = map("xsize")
 	link:write(xsize.."\n")

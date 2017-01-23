@@ -11,6 +11,7 @@ import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
@@ -44,20 +45,19 @@ public class WeaponInfo
 		return instance;
 	}
 
-	private final String weaponsGfxDirectory;
 	private final Weapon[] weapons;
 
 	private WeaponInfo()
 	{
+		String weaponGfxDirectory = SpyCs2dInfo.get().getCs2dDirectory("gfx/weapons/");
 		try (AccessSource source = SpyAccess.WEAPONS.access())
 		{
-			weaponsGfxDirectory = source.read();
 			weapons = new Weapon[source.readInt()];
 			for (int i = 0; i < weapons.length; i++)
 			{
 				try
 				{
-					weapons[i] = new Weapon(i + 1, source);
+					weapons[i] = new Weapon(i + 1, source, weaponGfxDirectory);
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -80,32 +80,31 @@ public class WeaponInfo
 	{
 		private int weaponID;
 		private String name;
-		private Image gfx;
+		private String gfxName;
+		private Optional<Image> gfx = Optional.empty();
 
-		public Weapon(int weaponID, AccessSource source) throws IOException
+		public Weapon(int weaponID, AccessSource source, String weaponGfxDirectory) throws IOException
 		{
 			this.weaponID = weaponID;
 			name = source.read();
+			gfxName = name.replaceAll("-", "").replaceAll(" ", "").toLowerCase();
 			if (name.equals(""))
 				throw new IllegalArgumentException("Weapon name empty");
-			gfx = addTransparancy(new Color(0, 0, 0).getRGB(), readImage(getGfxFile()));
+			File weaponGfxFile = getGfxFile(weaponGfxDirectory);
+			if (weaponGfxFile.exists())
+			{
+				gfx = Optional.of(addTransparancy(new Color(0, 0, 0).getRGB(), readImage(weaponGfxFile)));
+			}
 		}
 
-		private File getGfxFile() throws FileNotFoundException
+		private File getGfxFile(String weaponGfxDirectory) throws FileNotFoundException
 		{
-			String filename = weaponsGfxDirectory + name.replaceAll("-", "").replaceAll(" ", "").toLowerCase();
-			File file_d = new File(filename + "_d.bmp");
-			if (file_d.exists())
-				return file_d;
-			File file = new File(filename + ".bmp");
-			if (file.exists() == false)
-				throw new FileNotFoundException(file.toString());
-			return file;
+			return new File(weaponGfxDirectory + gfxName + ".bmp");
 		}
 
-		private BufferedImage readImage(File tilesetFile) throws IOException
+		private BufferedImage readImage(File file) throws IOException
 		{
-			BufferedImage image = ImageIO.read(tilesetFile);
+			BufferedImage image = ImageIO.read(file);
 			BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 			convertedImage.getGraphics().drawImage(image, 0, 0, null);
 			return convertedImage;
@@ -138,7 +137,7 @@ public class WeaponInfo
 			return name;
 		}
 
-		public Image getGfx()
+		public Optional<Image> getGfx()
 		{
 			return gfx;
 		}

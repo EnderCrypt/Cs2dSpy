@@ -40,7 +40,8 @@ public class SpyMap
 	public SpyMap(AccessSource source) throws IOException
 	{
 		// line 1
-		masterTileset = new MasterTileset(System.getProperty("user.dir") + "/" + source.read());
+		String filesetFile = SpyCs2dInfo.get().getCs2dDirectory("gfx/tiles/") + source.read();
+		masterTileset = new MasterTileset(filesetFile);
 
 		// line 2
 		int mapWidth = source.readInt();

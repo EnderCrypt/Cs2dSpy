@@ -1,10 +1,6 @@
-Cs2dSpy.print("Writting weapon data...")
-
 function Cs2dSpy.linkTransfer.weapons()
 	-- open link
 	local link = Cs2dSpy.openLink("Weapons")
-	-- relative cs2d path
-	link:write(Cs2dSpy.relativeJarCs2dDirectory.."gfx/weapons/\n")
 	-- write weapons
 	local weaponTypeCount = Cs2dSpy.cs2dWeaponTypeCount()
 	link:write(weaponTypeCount.."\n")

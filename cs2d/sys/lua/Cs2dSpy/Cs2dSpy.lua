@@ -6,17 +6,19 @@ dofile(Cs2dSpy.baseDirectory.."Cs2dSpySettings.lua")
 
 Cs2dSpy.AccessFolder = Cs2dSpy.baseDirectory..Cs2dSpy.settings.getString("Directory.AccessFolder").."/"
 Cs2dSpy.LinkExtension = Cs2dSpy.settings.getString("Directory.LinkExtension")
-Cs2dSpy.relativeJarCs2dDirectory = "../../../" -- relative directory to cs2d main folder from the jar (opposite of Cs2dSpy.baseDirectory)
+Cs2dSpy.relativeCs2dDirectory = "../../../" -- relative directory to cs2d main folder from the Cs2dSpy directory (opposite of Cs2dSpy.baseDirectory)
 Cs2dSpy.updateFrequency = Cs2dSpy.settings.getNumber("Cs2d.UpdateFrequency") -- every X frame
 Cs2dSpy.chatBufferSize = Cs2dSpy.settings.getNumber("Cs2d.ChatSize") -- number of chat messages to keep in link
 
 Cs2dSpy.linkTransfer = {}
 dofile(Cs2dSpy.baseDirectory.."LinkTypes/Map.lua")
 dofile(Cs2dSpy.baseDirectory.."LinkTypes/Weapons.lua")
+dofile(Cs2dSpy.baseDirectory.."LinkTypes/Info.lua")
 dofile(Cs2dSpy.baseDirectory.."LinkTypes/RealTime.lua")
 
 Cs2dSpy.linkTransfer.map()
 Cs2dSpy.linkTransfer.weapons()
+Cs2dSpy.linkTransfer.info()
 
 addhook("always","Cs2dSpy.always")
 Cs2dSpy.frameNumber = 0
