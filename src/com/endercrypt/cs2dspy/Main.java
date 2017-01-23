@@ -27,6 +27,7 @@ import com.endercrypt.cs2dspy.network.update.VersionManager;
 import com.endercrypt.cs2dspy.network.update.version.Version;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
+import com.endercrypt.cs2dspy.representation.position.GlobalPosition;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
 import com.endercrypt.cs2dspy.setting.Settings;
 import com.endercrypt.library.position.Position;
@@ -183,9 +184,7 @@ public class Main
 		private Dimension screenSize;
 		private Optional<SpyPlayer> hoverPlayer = Optional.empty();
 		private Optional<SpyPlayer> spectPlayer = Optional.empty();
-		private Position mousePosition;
-		private Position mapMousePosition;
-		private Point mapTilePosition;
+		private GlobalPosition mousePosition;
 
 		@Override
 		public void onDraw(Graphics2D g2d, Dimension guiScreenSize)
@@ -194,9 +193,7 @@ public class Main
 			Graphics2D hudG2d = (Graphics2D) g2d.create();
 			screenSize = guiScreenSize;
 
-			mousePosition = new Position(window.getMousePosition());
-			mapMousePosition = generateMapPosition(mousePosition);
-			mapTilePosition = new Point((int) (mapMousePosition.x / 32), (int) (mapMousePosition.y / 32));
+			mousePosition = GlobalPosition.fromHud(new Position(window.getMousePosition()), view, guiScreenSize);
 
 			// spectate if enabled
 			spectPlayer = spectate.get(realtime);
@@ -208,7 +205,7 @@ public class Main
 			if (realtime != null)
 			{
 				realtime.draw(g2d);
-				hoverPlayer = realtime.getNearbyPlayer(mapMousePosition, 250.0);
+				hoverPlayer = realtime.getNearbyPlayer(mousePosition.getMapPosition(), 250.0);
 			}
 
 			// dispose graphics
@@ -218,75 +215,70 @@ public class Main
 			drawHud(hudG2d);
 		}
 
-		private Position generateHudPosition(Position mapPosition)
-		{
-			Position viewPosition = view.getPosition();
-			Position hudPosition = new Position(0, 0);
-
-			hudPosition.x += (screenSize.width / 2);
-			hudPosition.y += (screenSize.height / 2);
-
-			hudPosition.x += (mapPosition.x - viewPosition.x) * view.getDividedZoom();
-			hudPosition.y += (mapPosition.y - viewPosition.y) * view.getDividedZoom();
-
-			return hudPosition;
-		}
-
-		private Position generateMapPosition(Position hudPosition)
-		{
-			Position viewPosition = view.getPosition();
-			Position mapPosition = new Position(0, 0);
-
-			mapPosition.x -= (screenSize.width / 2) * view.getZoom();
-			mapPosition.y -= (screenSize.height / 2) * view.getZoom();
-
-			mapPosition.x += hudPosition.x * view.getZoom();
-			mapPosition.y += hudPosition.y * view.getZoom();
-
-			mapPosition.x += viewPosition.x;
-			mapPosition.y += viewPosition.y;
-			return mapPosition;
-		}
-
 		private void drawHud(Graphics2D g2d)
 		{
 			g2d.setColor(Color.BLACK);
 			FontMetrics fontMetrics = g2d.getFontMetrics();
-			int yAdd = fontMetrics.getDescent() + fontMetrics.getHeight();
-			// draw mouse position
+
+			int leftHudY = (fontMetrics.getDescent() + fontMetrics.getHeight());
+			drawMousePositionInfo(g2d, leftHudY);
+
+			leftHudY += (fontMetrics.getDescent() + fontMetrics.getHeight());
+			drawVersionInfo(g2d, leftHudY);
+
+			drawHoverPlayerData(g2d);
+
+			drawRealtimeHud(g2d);
+
+			drawSpectatingInfo(g2d);
+		}
+
+		private void drawMousePositionInfo(Graphics2D g2d, int y)
+		{
 			GuiText guiLocationText = new GuiText();
-			guiLocationText.addText(Math.round(mapMousePosition.x) + ", " + Math.round(mapMousePosition.y) + " (" + mapTilePosition.x + "|" + mapTilePosition.y + ")", Color.BLACK);
-			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10 + (yAdd * 0));
+			Position mousePixel = mousePosition.getMapPosition();
+			Point mouseTile = mousePosition.getTilePosition();
+			guiLocationText.addText(Math.round(mousePixel.x) + ", " + Math.round(mousePixel.y) + " (" + mouseTile.x + "|" + mouseTile.y + ")", Color.BLACK);
+			guiLocationText.draw(g2d, Alignment.RIGHT, 10, 10 + (y * 0));
 
 			GuiText guiZoomText = new GuiText();
 			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% Scale", Color.BLACK);
-			guiZoomText.draw(g2d, Alignment.RIGHT, 10, 10 + (yAdd * 1));
+			guiZoomText.draw(g2d, Alignment.RIGHT, 10, 10 + (y * 1));
+		}
 
-			// draw version info
-			version.ifPresent((v) -> v.draw(g2d, 10, 10 + (yAdd * 2), Alignment.RIGHT));
+		private void drawVersionInfo(Graphics2D g2d, int y)
+		{
+			version.ifPresent((v) -> v.draw(g2d, 10, 10 + (y * 2), Alignment.RIGHT));
+		}
 
-			// draw data about player near mouse
+		private void drawHoverPlayerData(Graphics2D g2d)
+		{
 			hoverPlayer.ifPresent(new Consumer<SpyPlayer>()
 			{
 				@Override
 				public void accept(SpyPlayer player)
 				{
-					Position position = player.getPosition();
-					Position hudPosition = generateHudPosition(position);
+					GlobalPosition playerPosition = GlobalPosition.fromMap(player.getPosition(), view, screenSize);
+					Position playerHudPosition = playerPosition.getHudPosition();
+					Position mouseHudPosition = mousePosition.getHudPosition();
 					g2d.setColor(Color.BLACK);
-					g2d.drawLine((int) hudPosition.x, (int) hudPosition.y, (int) mousePosition.x, (int) mousePosition.y);
-					player.drawHudInfo(g2d, new Point((int) mousePosition.x, (int) mousePosition.y));
+					g2d.drawLine((int) playerHudPosition.x, (int) playerHudPosition.y, (int) mouseHudPosition.x, (int) mouseHudPosition.y);
+					player.drawHudInfo(g2d, new Point((int) mouseHudPosition.x, (int) mouseHudPosition.y));
 				}
 			});
+		}
 
-			// draw hud
+		private void drawRealtimeHud(Graphics2D g2d)
+		{
 			if (realtime != null)
 			{
 				g2d.setColor(Color.WHITE);
 				realtime.drawHud(g2d, screenSize);
 			}
+		}
 
-			// draw info about spectating a player
+		private void drawSpectatingInfo(Graphics2D g2d)
+		{
 			spectate.get(realtime).ifPresent(new Consumer<SpyPlayer>()
 			{
 				@Override
