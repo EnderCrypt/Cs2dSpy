@@ -8,6 +8,8 @@ import java.awt.Point;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.endercrypt.cs2dspy.gui.fps.FpsCounter;
+import com.endercrypt.cs2dspy.gui.fps.FpsFrame;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
 
 /**
@@ -34,6 +36,7 @@ public class AwtWindow
 	private JPanel jPanel;
 	private Keyboard keyboard;
 	private MousePointer MousePointer;
+	private FpsCounter fpsCounter = new FpsCounter();
 
 	public AwtWindow(String title, Dimension windowSize, DrawListener listener)
 	{
@@ -55,9 +58,11 @@ public class AwtWindow
 			{
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
+				FpsFrame frame = new FpsFrame();
 				g2d.drawString("", 0, 0); // java bug causes delays first time drawing string, might aswell do it as early as possible
 				Dimension screenSize = getSize();
 				listener.onDraw(g2d, screenSize);
+				fpsCounter.add(frame);
 			}
 		};
 
@@ -82,6 +87,11 @@ public class AwtWindow
 	public JFrame getJFrame()
 	{
 		return jFrame;
+	}
+
+	public FpsCounter getFpsCounter()
+	{
+		return fpsCounter;
 	}
 
 	public void show()

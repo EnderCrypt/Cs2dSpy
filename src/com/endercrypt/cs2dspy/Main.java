@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 
 import com.endercrypt.cs2dspy.gui.AwtWindow;
 import com.endercrypt.cs2dspy.gui.View;
+import com.endercrypt.cs2dspy.gui.fps.FpsCounter;
 import com.endercrypt.cs2dspy.gui.keyboard.Keyboard;
 import com.endercrypt.cs2dspy.gui.splash.SplashWindow;
 import com.endercrypt.cs2dspy.gui.text.GuiPrinter;
@@ -230,6 +231,7 @@ public class Main
 					.setDirection(Direction.DOWN)
 					.setTextAlignment(GuiText.Alignment.RIGHT)
 					.build();
+			drawFpsCounter(infoHud);
 			drawMousePositionInfo(infoHud);
 			drawScaleInfo(infoHud);
 			drawVersionInfo(infoHud);
@@ -242,22 +244,36 @@ public class Main
 			drawSpectatingInfo(g2d);
 		}
 
+		private static void drawFpsCounter(GuiPrinter printer)
+		{
+			FpsCounter fpsCounter = window.getFpsCounter();
+			GuiText guiText = new GuiText();
+			guiText.addText("Fps: (", Color.BLACK);
+			guiText.addText(String.valueOf(G_FPS), Color.BLACK);
+			guiText.addText(") ", Color.BLACK);
+			guiText.addText(String.valueOf(fpsCounter.getFps()), Color.BLACK);
+			guiText.addText(" (~", Color.BLACK);
+			guiText.addText(String.valueOf(Math.round(fpsCounter.averageFrameMs())), Color.BLACK);
+			guiText.addText("Ms)", Color.BLACK);
+			printer.add(guiText);
+		}
+
 		private void drawMousePositionInfo(GuiPrinter printer)
 		{
-			GuiText guiLocationText = new GuiText();
+			GuiText guiText = new GuiText();
 			Position mousePixel = mousePosition.getMapPosition();
 			Point mouseTile = mousePosition.getTilePosition();
-			guiLocationText.addText(Math.round(mousePixel.x) + ", " + Math.round(mousePixel.y) + " (" + mouseTile.x + "|" + mouseTile.y + ")", Color.BLACK);
+			guiText.addText(Math.round(mousePixel.x) + ", " + Math.round(mousePixel.y) + " (" + mouseTile.x + "|" + mouseTile.y + ")", Color.BLACK);
 
-			printer.add(guiLocationText);
+			printer.add(guiText);
 		}
 
 		private static void drawScaleInfo(GuiPrinter printer)
 		{
-			GuiText guiZoomText = new GuiText();
-			guiZoomText.addText(Math.round(100.0 * view.getDividedZoom()) + "% Scale", Color.BLACK);
+			GuiText guiText = new GuiText();
+			guiText.addText(Math.round(100.0 * view.getDividedZoom()) + "% Scale", Color.BLACK);
 
-			printer.add(guiZoomText);
+			printer.add(guiText);
 		}
 
 		private static void drawVersionInfo(GuiPrinter printer)
