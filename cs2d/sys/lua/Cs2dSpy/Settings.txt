@@ -6,7 +6,7 @@ Client.CameraSpeed = 5.0
 Client.GuiTextBgColor = 255, 255, 255, 100
 Client.UpdateCheck = True
 Client.FontName = DEFAULT_FONT
-Client.FontSize = 12
+Client.FontSize = 13
 
 // Cs2d
 Cs2d.UpdateFrequency = 1

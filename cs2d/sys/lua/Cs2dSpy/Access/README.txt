@@ -1,1 +1,0 @@
-this folder is just used to transfer data between Cs2d and the spy client
