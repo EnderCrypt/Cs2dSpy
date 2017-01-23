@@ -98,7 +98,7 @@ public class Main
 				font = new Font(fontName, Font.PLAIN, fontSize);
 			}
 		}
-		System.out.println("Font: " + font);
+		System.out.println("Font: \"" + font.getName() + "\" Size: " + font.getSize());
 
 		// read in map data from cs2d
 		try (AccessSource source = SpyAccess.MAP.access())
