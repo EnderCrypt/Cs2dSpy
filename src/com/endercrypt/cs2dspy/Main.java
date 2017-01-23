@@ -85,6 +85,7 @@ public class Main
 		String fontName = settings.key("Client.FontName").getString();
 		int fontSize = settings.key("Client.FontSize").getInteger();
 		font = window.getJFrame().getFont();
+		font = new Font(font.getName(), font.getStyle(), fontSize);
 		for (String existingFontName : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames())
 		{
 			if (existingFontName.equals(fontName))
