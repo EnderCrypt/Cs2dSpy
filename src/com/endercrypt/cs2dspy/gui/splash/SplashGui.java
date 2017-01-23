@@ -6,6 +6,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
 import com.endercrypt.cs2dspy.gui.AwtWindow.DrawListener;
+import com.endercrypt.cs2dspy.gui.text.GuiPadding;
+import com.endercrypt.cs2dspy.gui.text.GuiPrinter;
+import com.endercrypt.cs2dspy.gui.text.GuiPrinter.Direction;
+import com.endercrypt.cs2dspy.gui.text.GuiText;
 import com.endercrypt.cs2dspy.network.update.VersionManager;
 
 /**
@@ -34,30 +38,38 @@ public class SplashGui implements DrawListener
 		g2d.setColor(new Color(200, 200, 255));
 		g2d.fillRect(0, 0, screenSize.width, screenSize.height);
 		g2d.setColor(Color.BLACK);
-		SplashPrinter printer = new SplashPrinter(g2d, screenSize.width / 2, 20);
-		printer.println("Cs2d Spy Version " + VersionManager.getCurrentVersion().toString("."));
-		printer.println("Created By EnderCrypt (Magnus G)");
-		printer.println("U.S.G.N: 5783");
-		printer.println("https://github.com/EnderCrypt/Cs2dSpy");
+
+		SplashPrinter printer = new SplashPrinter(g2d, screenSize);
+		printer.add("Cs2d Spy Version " + VersionManager.getCurrentVersion().toString("."));
+		printer.add("Created By EnderCrypt (Magnus G)");
+		printer.add("U.S.G.N: 5783");
+		printer.add("https://github.com/EnderCrypt/Cs2dSpy");
 		printer.skipln(3);
-		printer.println("License");
-		printer.println("GNU General Public License v3");
-		printer.println("Read LICENSE.txt for further info");
+		printer.add("License");
+		printer.add("GNU General Public License v3");
+		printer.add("Read LICENSE.txt for further info");
+
+		printer.draw();
 	}
 
 	private class SplashPrinter
 	{
 		private final Graphics2D g2d;
 		private final FontMetrics fontMetrics;
-		private int x;
-		private int y;
+		private final GuiPrinter splashPrinter;
 
-		protected SplashPrinter(Graphics2D g2d, int x, int y)
+		private final Color bgColor = new Color(0, 0, 0, 0);
+
+		protected SplashPrinter(Graphics2D g2d, Dimension screenSize)
 		{
 			this.g2d = g2d;
 			this.fontMetrics = g2d.getFontMetrics();
-			this.x = x;
-			this.y = y;
+			this.splashPrinter = new GuiPrinter.Builder()
+					.setPosition(screenSize.width / 2, 16)
+					.setPadding(3)
+					.setDirection(Direction.DOWN)
+					.setTextAlignment(GuiText.Alignment.CENTER)
+					.build();
 		}
 
 		public void skipln()
@@ -67,14 +79,17 @@ public class SplashGui implements DrawListener
 
 		public void skipln(int times)
 		{
-			y += (fontMetrics.getHeight() + 2) * times;
+			splashPrinter.add(new GuiPadding((fontMetrics.getHeight() + 2) * times));
 		}
 
-		public void println(String text)
+		public void add(String text)
 		{
-			int xPos = x - (fontMetrics.stringWidth(text) / 2);
-			g2d.drawString(text, xPos, y);
-			skipln();
+			splashPrinter.add(new GuiText(text, Color.BLACK, bgColor));
+		}
+
+		public void draw()
+		{
+			splashPrinter.draw(g2d);
 		}
 	}
 }

@@ -19,7 +19,7 @@ public class GuiPrinter
 	private final int padding;
 	private final Direction direction;
 	private final Alignment textAlignment;
-	private final Queue<GuiText> texts = new ArrayDeque<>();
+	private final Queue<GuiElement> elements = new ArrayDeque<>();
 
 	public GuiPrinter(int x, int y, int padding, Direction direction, Alignment textAlignment)
 	{
@@ -30,9 +30,10 @@ public class GuiPrinter
 		this.textAlignment = textAlignment;
 	}
 
-	public void add(GuiText guiText)
+	public void add(GuiElement guiElement)
 	{
-		texts.add(guiText);
+		elements.add(guiElement);
+		elements.add(new GuiPadding(padding));
 	}
 
 	public void draw(Graphics2D g2d)
@@ -45,18 +46,17 @@ public class GuiPrinter
 			yPosition -= fontMetrics.getHeight();
 		}
 
-		int yShift = (fontMetrics.getHeight()) + padding;
-
-		for (GuiText text : texts)
+		for (GuiElement element : elements)
 		{
-			text.draw(g2d, textAlignment, x, yPosition);
+			element.draw(g2d, textAlignment, x, yPosition);
+			int height = element.getHeight(fontMetrics);
 			switch (direction)
 			{
 			case UP:
-				yPosition -= yShift;
+				yPosition -= height;
 				break;
 			case DOWN:
-				yPosition += yShift;
+				yPosition += height;
 				break;
 			}
 		}

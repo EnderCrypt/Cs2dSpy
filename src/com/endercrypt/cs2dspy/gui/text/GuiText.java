@@ -26,20 +26,33 @@ import com.endercrypt.cs2dspy.setting.Settings;
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GuiText
+public class GuiText implements GuiElement
 {
+	private static Color defaultBackgroundColor = Settings.get().key("Client.GuiTextBgColor").colorArgs(100);
 	private static final int PADDING_WIDTH = 2;
-	private Color backgroundColor;// = new Color(255, 255, 255, 100);
+
+	private Color backgroundColor;
 	private Deque<Text> texts = new ArrayDeque<>();
 
 	public GuiText()
 	{
-		backgroundColor = Settings.get().key("Client.GuiTextBgColor").colorArgs(100);
+		this(defaultBackgroundColor);
+	}
+
+	public GuiText(Color backgroundColor)
+	{
+		this.backgroundColor = backgroundColor;
 	}
 
 	public GuiText(String text, Color color)
 	{
 		this();
+		addText(text, color);
+	}
+
+	public GuiText(String text, Color color, Color backgroundColor)
+	{
+		this(backgroundColor);
 		addText(text, color);
 	}
 
@@ -56,22 +69,29 @@ public class GuiText
 		}
 	}
 
-	private int getWidth(FontMetrics fontMetrics)
+	public int getWidth(FontMetrics fontMetrics)
 	{
 		int width = 0;
 		for (Text text : texts)
 		{
 			width += text.getLength(fontMetrics);
 		}
-		return width;
+		return (width + (PADDING_WIDTH * 2));
 	}
 
+	@Override
+	public int getHeight(FontMetrics fontMetrics)
+	{
+		return fontMetrics.getHeight();
+	}
+
+	@Override
 	public void draw(Graphics2D g2d, Alignment alignment, int x, int y)
 	{
 		FontMetrics fontMetrics = g2d.getFontMetrics();
-		int width = getWidth(fontMetrics) + (PADDING_WIDTH * 2);
+		int width = getWidth(fontMetrics);
+		int height = getHeight(fontMetrics);
 		x += (width * alignment.value);
-		int height = fontMetrics.getHeight();
 		int ascent = fontMetrics.getAscent();
 		g2d.setColor(backgroundColor);
 		g2d.fillRect(x, y, width, height);
