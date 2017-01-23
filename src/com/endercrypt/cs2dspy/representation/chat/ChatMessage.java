@@ -3,8 +3,8 @@ package com.endercrypt.cs2dspy.representation.chat;
 import java.awt.Color;
 import java.io.IOException;
 
-import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.gui.text.GuiText;
+import com.endercrypt.cs2dspy.link.AccessSource;
 import com.endercrypt.cs2dspy.representation.realtime.Team;
 
 /**

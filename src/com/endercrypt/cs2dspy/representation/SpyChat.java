@@ -7,9 +7,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
-import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.gui.text.GuiPrinter;
 import com.endercrypt.cs2dspy.gui.text.GuiPrinter.Direction;
+import com.endercrypt.cs2dspy.link.AccessSource;
 import com.endercrypt.cs2dspy.gui.text.GuiText;
 import com.endercrypt.cs2dspy.representation.chat.ChatMessage;
 

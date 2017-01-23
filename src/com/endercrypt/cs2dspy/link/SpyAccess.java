@@ -1,4 +1,4 @@
-package com.endercrypt.cs2dspy;
+package com.endercrypt.cs2dspy.link;
 
 import java.io.File;
 import java.io.FileNotFoundException;

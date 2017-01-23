@@ -14,8 +14,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.endercrypt.cs2dspy.AccessSource;
-import com.endercrypt.cs2dspy.SpyAccess;
+import com.endercrypt.cs2dspy.link.AccessSource;
+import com.endercrypt.cs2dspy.link.SpyAccess;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson

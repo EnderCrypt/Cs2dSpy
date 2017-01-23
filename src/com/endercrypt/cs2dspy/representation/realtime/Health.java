@@ -3,7 +3,7 @@ package com.endercrypt.cs2dspy.representation.realtime;
 import java.awt.Color;
 import java.io.IOException;
 
-import com.endercrypt.cs2dspy.AccessSource;
+import com.endercrypt.cs2dspy.link.AccessSource;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson

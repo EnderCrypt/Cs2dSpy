@@ -6,8 +6,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.IOException;
 
-import com.endercrypt.cs2dspy.AccessSource;
 import com.endercrypt.cs2dspy.gui.View;
+import com.endercrypt.cs2dspy.link.AccessSource;
 import com.endercrypt.cs2dspy.representation.map.MasterTileset;
 import com.endercrypt.cs2dspy.representation.map.Tileset;
 import com.endercrypt.library.position.Position;

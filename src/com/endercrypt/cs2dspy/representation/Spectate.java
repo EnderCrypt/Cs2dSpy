@@ -1,8 +1,7 @@
-package com.endercrypt.cs2dspy;
+package com.endercrypt.cs2dspy.representation;
 
 import java.util.Optional;
 
-import com.endercrypt.cs2dspy.representation.SpyRealtime;
 import com.endercrypt.cs2dspy.representation.realtime.SpyPlayer;
 
 /**
