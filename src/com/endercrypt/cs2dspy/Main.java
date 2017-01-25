@@ -78,7 +78,7 @@ public class Main
 		Dimension screenSize = new Dimension(settings.key("Client.Width").getInteger(), settings.key("Client.Height").getInteger());
 		G_FPS = settings.key("Client.Fps").getInteger();
 		Cs2dSpyUpdateFrequency = settings.key("Cs2d.UpdateFrequency").getInteger();
-		U_FPS = 50 / Cs2dSpyUpdateFrequency;
+		U_FPS = 1000 / 50 * Cs2dSpyUpdateFrequency;
 
 		System.out.println("Starting Cs2d client...");
 
