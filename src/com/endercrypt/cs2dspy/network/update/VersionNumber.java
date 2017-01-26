@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.endercrypt.cs2dspy.network.update.version.GenericVersion;
-import com.endercrypt.cs2dspy.network.update.version.SameVersion;
+import com.endercrypt.cs2dspy.network.update.version.CorrectVersion;
 import com.endercrypt.cs2dspy.network.update.version.Version;
 
 /**
@@ -75,7 +75,7 @@ public class VersionNumber
 		int otherScore = other.getScore();
 		if (score == otherScore)
 		{
-			return new SameVersion();
+			return new CorrectVersion();
 		}
 		else
 		{

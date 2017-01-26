@@ -1,7 +1,6 @@
 package com.endercrypt.cs2dspy.network.update.version;
 
 import java.awt.Color;
-import com.endercrypt.cs2dspy.gui.text.GuiText;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -21,36 +20,10 @@ import com.endercrypt.cs2dspy.gui.text.GuiText;
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SameVersion extends GenericVersion
+public class CorrectVersion extends GenericVersion
 {
-	private double alpha = 1.0;
-
-	public SameVersion()
+	public CorrectVersion()
 	{
-		super("Version up to date!", getColor(1.0));
-	}
-
-	private static Color getColor(double alpha)
-	{
-		return new Color(0, 255, 0, (int) (255 * alpha));
-	}
-
-	@Override
-	public GuiText generateGuiText()
-	{
-		alpha -= 0.005;
-		/*
-		double xBack = (0.25 - alpha);
-		if (xBack < 0)
-			xBack = 0;
-		xBack = (xBack / 0.25) * 20;
-		xBack *= xBack;
-		x -= (int) xBack;
-		*/
-		if (alpha > 0)
-		{
-			super.color = getColor(alpha);
-		}
-		return super.generateGuiText();
+		super("Version up to date!", new Color(100, 255, 100));
 	}
 }

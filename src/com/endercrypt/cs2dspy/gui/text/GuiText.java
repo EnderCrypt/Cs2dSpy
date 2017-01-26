@@ -29,10 +29,10 @@ import com.endercrypt.cs2dspy.setting.Settings;
 public class GuiText implements GuiElement
 {
 	private static Color defaultBackgroundColor = Settings.get().key("Client.GuiTextBgColor").colorArgs(100);
-	private static final int PADDING_WIDTH = 2;
+	protected static final int PADDING_WIDTH = 2;
 
-	private Color backgroundColor;
-	private Deque<Text> texts = new ArrayDeque<>();
+	protected Color backgroundColor;
+	protected Deque<Text> texts = new ArrayDeque<>();
 
 	public GuiText()
 	{
@@ -91,7 +91,7 @@ public class GuiText implements GuiElement
 		FontMetrics fontMetrics = g2d.getFontMetrics();
 		int width = getWidth(fontMetrics);
 		int height = getHeight(fontMetrics);
-		x += (width * alignment.value);
+		x += (width * alignment.getValue());
 		int ascent = fontMetrics.getAscent();
 		g2d.setColor(backgroundColor);
 		g2d.fillRect(x, y, width, height);
@@ -114,6 +114,11 @@ public class GuiText implements GuiElement
 		private Alignment(double value)
 		{
 			this.value = value;
+		}
+
+		public double getValue()
+		{
+			return value;
 		}
 	}
 
