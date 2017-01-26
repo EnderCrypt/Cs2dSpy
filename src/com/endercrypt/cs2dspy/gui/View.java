@@ -32,7 +32,7 @@ import com.endercrypt.library.position.Position;
 public class View
 {
 	public double viewSpeed;
-	public double ZOOM_SPEED = 0.05;
+	public double zoomSpeed;
 
 	private Position position;
 	private Motion motion;
@@ -42,7 +42,8 @@ public class View
 
 	public View()
 	{
-		viewSpeed = Settings.get().key("Client.CameraSpeed").getDouble();
+		viewSpeed = Settings.get().key("Client.CameraMovementSpeed").getDouble();
+		zoomSpeed = Settings.get().key("Client.CameraZoomSpeed").getDouble() / 100;
 	}
 
 	public View(Position position)
@@ -59,8 +60,8 @@ public class View
 		keyboard.bindKey(KeyEvent.VK_W, BindType.HOLD, (keyCode, bindType) -> motion.y -= viewSpeed * zoom);
 		keyboard.bindKey(KeyEvent.VK_S, BindType.HOLD, (keyCode, bindType) -> motion.y += viewSpeed * zoom);
 
-		keyboard.bindKey(KeyEvent.VK_R, BindType.HOLD, (keyCode, bindType) -> zoomMotion += ZOOM_SPEED);
-		keyboard.bindKey(KeyEvent.VK_F, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= ZOOM_SPEED);
+		keyboard.bindKey(KeyEvent.VK_R, BindType.HOLD, (keyCode, bindType) -> zoomMotion += zoomSpeed);
+		keyboard.bindKey(KeyEvent.VK_F, BindType.HOLD, (keyCode, bindType) -> zoomMotion -= zoomSpeed);
 	}
 
 	public void update()
