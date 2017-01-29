@@ -214,9 +214,6 @@ public class Main
 				hoverPlayer = realtime.getNearbyPlayer(mousePosition.getMapPosition(), 250.0);
 			}
 
-			// dispose graphics
-			g2d.dispose();
-
 			// draw HUD
 			drawHud(hudG2d);
 		}
