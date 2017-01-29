@@ -1,6 +1,9 @@
 package com.endercrypt.cs2dspy.representation.map;
 
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +42,7 @@ public class MasterTileset
 
 	public MasterTileset(File tilesetFile) throws IOException
 	{
+		GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
 		// read tileset image
 		BufferedImage tilesetImage = GraphicsUtil.loadImage(tilesetFile);
 		verifyTilesetSize(tilesetImage.getWidth(), tilesetImage.getHeight());
@@ -50,7 +54,12 @@ public class MasterTileset
 		{
 			for (int x = 0; x < x_tiles; x++)
 			{
-				tiles[tileID] = tilesetImage.getSubimage(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+				// create the tile image
+				BufferedImage subImage = tilesetImage.getSubimage(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+				// transfer to a CompatibleImage
+				BufferedImage tileImage = graphicsConfiguration.createCompatibleImage(TILE_SIZE, TILE_SIZE, Transparency.BITMASK);
+				tileImage.createGraphics().drawImage(subImage, 0, 0, null);
+				tiles[tileID] = tileImage;
 				tileID++;
 			}
 		}

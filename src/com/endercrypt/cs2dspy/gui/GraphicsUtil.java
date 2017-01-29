@@ -37,11 +37,11 @@ public class GraphicsUtil
 		return optimizeImage(ImageIO.read(file));
 	}
 
-	public static <T extends BufferedImage> T optimizeImage(T image)
+	public static BufferedImage optimizeImage(BufferedImage image)
 	{
 		BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 		convertedImage.getGraphics().drawImage(image, 0, 0, null);
-		return image;
+		return convertedImage;
 	}
 
 	public static Image filterOutColor(Image image, int filterColor)
