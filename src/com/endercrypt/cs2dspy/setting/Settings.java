@@ -42,8 +42,7 @@ public class Settings
 		File file = new File(settingsFile);
 		try (BufferedReader reader = new BufferedReader(new FileReader(file)))
 		{
-			if (PRINT_SETTINGS)
-				System.out.println("Settings available:");
+			println("Settings available:");
 			String line = null;
 			while ((line = reader.readLine()) != null)
 			{
@@ -52,8 +51,7 @@ public class Settings
 				{
 					Setting setting = new Setting(line);
 					settingsMap.put(setting.getName().toLowerCase(), setting);
-					if (PRINT_SETTINGS)
-						System.out.println(setting);
+					println(setting);
 				}
 			}
 		}
@@ -61,6 +59,12 @@ public class Settings
 		{
 			throw new RuntimeException(e);
 		}
+	}
+
+	private static void println(String message)
+	{
+		if (PRINT_SETTINGS)
+			System.out.println(message);
 	}
 
 	public Setting key(String name)
