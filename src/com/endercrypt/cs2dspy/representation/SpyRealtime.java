@@ -91,7 +91,7 @@ public class SpyRealtime
 			if (ageMs < 10_000)
 				timeText = ageMs + " ms";
 			else
-				timeText = Math.round(ageMs / 1000) + " sec";
+				timeText = Math.round(ageMs / 1000.0) + " sec";
 			String warning = "Connection issue: " + timeText;
 			int warningWidth = fontMetrics.stringWidth(warning) + 10;
 			int x = (screenSize.width / 2) - (warningWidth / 2);

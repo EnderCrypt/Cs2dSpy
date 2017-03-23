@@ -239,6 +239,8 @@ public class Main
 			drawRealtimeHud(g2d);
 
 			drawSpectatingInfo(g2d);
+
+			drawPlayerList(g2d);
 		}
 
 		private static void drawFpsCounter(GuiPrinter printer)
@@ -329,6 +331,17 @@ public class Main
 					guiSpectatingText.draw(g2d, Alignment.LEFT, screenSize.width - 7, 10);
 				}
 			});
+		}
+
+		private void drawPlayerList(Graphics2D g2d)
+		{
+			Keyboard keyboard = window.getKeyboard();
+			if (keyboard.keyIsHeld(KeyEvent.VK_TAB))
+			{
+				GuiText text = new GuiText();
+				text.addText("Tab test", Color.BLACK);
+				text.draw(g2d, Alignment.CENTER, screenSize.width / 2, screenSize.height / 2);
+			}
 		}
 	}
 }

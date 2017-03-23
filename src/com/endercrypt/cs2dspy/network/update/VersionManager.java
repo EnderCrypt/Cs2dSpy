@@ -28,7 +28,7 @@ import com.endercrypt.cs2dspy.network.update.version.VersionError;
  */
 public class VersionManager
 {
-	private static VersionNumber currentVersion = new VersionNumber(0, 4);
+	private static VersionNumber currentVersion = new VersionNumber(0, 5);
 
 	public static VersionNumber getCurrentVersion()
 	{

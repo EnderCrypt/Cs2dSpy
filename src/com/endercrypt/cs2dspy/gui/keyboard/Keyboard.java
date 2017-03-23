@@ -2,8 +2,11 @@ package com.endercrypt.cs2dspy.gui.keyboard;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -38,10 +41,11 @@ public class Keyboard
 	}
 
 	private Map<KeyBinding, Set<AppKeyListener>> bindings = new HashMap<>();
-	private Set<Integer> keysDown = new HashSet<>();
+	private Deque<Integer> keysDown = new ArrayDeque<>();
 
 	public Keyboard(JFrame jFrame)
 	{
+		jFrame.setFocusTraversalKeysEnabled(false);
 		jFrame.addKeyListener(new KeyboardListener());
 	}
 
@@ -61,6 +65,18 @@ public class Keyboard
 		}
 	}
 
+	public boolean keyIsHeld(int keyCode)
+	{
+		for (int keyDown : keysDown)
+		{
+			if (keyCode == keyDown)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void trigger(KeyBinding keyBinding)
 	{
 		Set<AppKeyListener> appKeyListeners = bindings.get(keyBinding);
@@ -69,6 +85,30 @@ public class Keyboard
 			for (AppKeyListener appKeyListener : appKeyListeners)
 			{
 				appKeyListener.keyTriggered(keyBinding.keyCode, keyBinding.bindType);
+			}
+		}
+	}
+
+	private void keyPress(int keyCode)
+	{
+		synchronized (keysDown)
+		{
+			keysDown.add(keyCode);
+		}
+	}
+
+	private void keyRelease(int keyCode)
+	{
+		synchronized (keysDown)
+		{
+			Iterator<Integer> iterator = keysDown.iterator();
+			while (iterator.hasNext())
+			{
+				int keysDownKeyCode = iterator.next();
+				if (keysDownKeyCode == keyCode)
+				{
+					iterator.remove();
+				}
 			}
 		}
 	}
@@ -131,10 +171,7 @@ public class Keyboard
 		public void keyPressed(KeyEvent e)
 		{
 			int keyCode = e.getKeyCode();
-			synchronized (keysDown)
-			{
-				keysDown.add(keyCode);
-			}
+			keyPress(keyCode);
 			Keyboard.this.trigger(new KeyBinding(keyCode, BindType.PRESS));
 		}
 
@@ -142,10 +179,7 @@ public class Keyboard
 		public void keyReleased(KeyEvent e)
 		{
 			int keyCode = e.getKeyCode();
-			synchronized (keysDown)
-			{
-				keysDown.remove(keyCode);
-			}
+			keyRelease(keyCode);
 			Keyboard.this.trigger(new KeyBinding(keyCode, BindType.RELEASE));
 		}
 	}
