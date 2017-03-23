@@ -51,7 +51,7 @@ public class Settings
 				{
 					Setting setting = new Setting(line);
 					settingsMap.put(setting.getName().toLowerCase(), setting);
-					println(setting);
+					println(setting.toString());
 				}
 			}
 		}
