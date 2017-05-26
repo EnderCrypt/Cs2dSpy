@@ -85,7 +85,7 @@ public class GraphicsObject
 		validate();
 	}
 
-	public void redrawVolatileImage()
+	private void redrawVolatileImage()
 	{
 		Graphics2D g2d = volatileImage.createGraphics();
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
