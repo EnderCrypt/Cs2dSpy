@@ -9,6 +9,7 @@ Client.UpdateCheck = True
 Client.FontName = DEFAULT_FONT
 Client.FontSize = 13
 Client.DisplayFps = True
+Client.TabBgColor = 200, 200, 200, 200
 
 // Cs2d
 Cs2d.UpdateFrequency = 1

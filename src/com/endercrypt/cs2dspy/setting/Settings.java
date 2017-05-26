@@ -28,7 +28,7 @@ import java.util.Map;
 public class Settings
 {
 	private static final Settings instance = new Settings("Settings.txt");
-	private static final boolean PRINT_SETTINGS = false;
+	private static final boolean PRINT_SETTINGS = true;
 
 	public static Settings get()
 	{

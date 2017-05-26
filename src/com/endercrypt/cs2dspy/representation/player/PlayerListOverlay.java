@@ -11,10 +11,11 @@ public class PlayerListOverlay
 	private static final int PADDING = 20;
 
 	private List<Column> columns = new ArrayList<>();
+	private Color backgroundColor;
 
-	public PlayerListOverlay()
+	public PlayerListOverlay(Color backgroundColor)
 	{
-		// TODO Auto-generated constructor stub
+		this.backgroundColor = backgroundColor;
 	}
 
 	public void addValue(PlayerValueType playerValue, int weight)
@@ -36,7 +37,7 @@ public class PlayerListOverlay
 	{
 		int totalWidht = screenSize.width - (PADDING * 2);
 		// full rect
-		g2d.setColor(new Color(200, 200, 200, 200));
+		g2d.setColor(backgroundColor);
 		g2d.fillRect(PADDING, PADDING, totalWidht, screenSize.height - (PADDING * 2));
 		// row lines
 		for (int i = 0; i < players.length; i++)

@@ -343,7 +343,8 @@ public class Main
 
 		private void drawPlayerList(Graphics2D g2d)
 		{
-			PlayerListOverlay tabList = new PlayerListOverlay();
+			Color backgroundColor = Settings.get().key("Client.TabBgColor").colorArgs(200);
+			PlayerListOverlay tabList = new PlayerListOverlay(backgroundColor);
 			tabList.addValue(PlayerValueType.ID, 1);
 			tabList.addValue(PlayerValueType.NAME, 15);
 			tabList.addValue(PlayerValueType.USGN, 3);
