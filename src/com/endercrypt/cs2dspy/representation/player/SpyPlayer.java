@@ -100,6 +100,36 @@ public class SpyPlayer
 		return team;
 	}
 
+	public int getUsgn()
+	{
+		return usgn;
+	}
+
+	public String getIp()
+	{
+		return ip;
+	}
+
+	public int getPort()
+	{
+		return port;
+	}
+
+	public String getAddress()
+	{
+		return ip + ":" + port;
+	}
+
+	public int getPing()
+	{
+		return ping;
+	}
+
+	public boolean isBot()
+	{
+		return isBot;
+	}
+
 	public Position getPosition()
 	{
 		return new Position(x, y);
@@ -209,10 +239,5 @@ public class SpyPlayer
 		{
 			return lines.iterator();
 		}
-	}
-
-	public boolean isBot()
-	{
-		return isBot;
 	}
 }

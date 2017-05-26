@@ -32,6 +32,8 @@ import com.endercrypt.cs2dspy.network.update.version.Version;
 import com.endercrypt.cs2dspy.representation.Spectate;
 import com.endercrypt.cs2dspy.representation.SpyMap;
 import com.endercrypt.cs2dspy.representation.SpyRealtime;
+import com.endercrypt.cs2dspy.representation.player.PlayerListOverlay;
+import com.endercrypt.cs2dspy.representation.player.PlayerValueType;
 import com.endercrypt.cs2dspy.representation.player.SpyPlayer;
 import com.endercrypt.cs2dspy.representation.position.GlobalPosition;
 import com.endercrypt.cs2dspy.setting.Settings;
@@ -222,25 +224,31 @@ public class Main
 		{
 			g2d.setColor(Color.BLACK);
 
-			GuiPrinter infoHud = new GuiPrinter.Builder()
-					.setPosition(10, 10)
-					.setPadding(5)
-					.setDirection(Direction.DOWN)
-					.setTextAlignment(GuiText.Alignment.RIGHT)
-					.build();
-			drawFpsCounter(infoHud);
-			drawMousePositionInfo(infoHud);
-			drawScaleInfo(infoHud);
-			drawVersionInfo(infoHud);
-			infoHud.draw(g2d);
+			Keyboard keyboard = window.getKeyboard();
+			if (keyboard.keyIsHeld(KeyEvent.VK_TAB))
+			{
+				drawPlayerList(g2d);
+			}
+			else
+			{
+				GuiPrinter infoHud = new GuiPrinter.Builder()
+						.setPosition(10, 10)
+						.setPadding(5)
+						.setDirection(Direction.DOWN)
+						.setTextAlignment(GuiText.Alignment.RIGHT)
+						.build();
+				drawFpsCounter(infoHud);
+				drawMousePositionInfo(infoHud);
+				drawScaleInfo(infoHud);
+				drawVersionInfo(infoHud);
+				infoHud.draw(g2d);
 
-			drawHoverPlayerData(g2d);
+				drawHoverPlayerData(g2d);
 
-			drawRealtimeHud(g2d);
+				drawRealtimeHud(g2d);
 
-			drawSpectatingInfo(g2d);
-
-			drawPlayerList(g2d);
+				drawSpectatingInfo(g2d);
+			}
 		}
 
 		private static void drawFpsCounter(GuiPrinter printer)
@@ -335,13 +343,13 @@ public class Main
 
 		private void drawPlayerList(Graphics2D g2d)
 		{
-			Keyboard keyboard = window.getKeyboard();
-			if (keyboard.keyIsHeld(KeyEvent.VK_TAB))
-			{
-				GuiText text = new GuiText();
-				text.addText("Tab test", Color.BLACK);
-				text.draw(g2d, Alignment.CENTER, screenSize.width / 2, screenSize.height / 2);
-			}
+			PlayerListOverlay tabList = new PlayerListOverlay();
+			tabList.addValue(PlayerValueType.ID, 1);
+			tabList.addValue(PlayerValueType.NAME, 15);
+			tabList.addValue(PlayerValueType.USGN, 3);
+			tabList.addValue(PlayerValueType.ADDRESS, 5);
+			tabList.addValue(PlayerValueType.LATENCY, 2);
+			tabList.draw(g2d, realtime.players(), screenSize);
 		}
 	}
 }
