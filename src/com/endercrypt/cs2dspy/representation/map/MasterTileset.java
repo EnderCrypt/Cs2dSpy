@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import com.endercrypt.cs2dspy.gui.GraphicsUtil;
+import javax.imageio.ImageIO;
 
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
@@ -44,7 +44,7 @@ public class MasterTileset
 	{
 		GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
 		// read tileset image
-		BufferedImage tilesetImage = GraphicsUtil.loadImage(tilesetFile);
+		BufferedImage tilesetImage = ImageIO.read(tilesetFile);
 		verifyTilesetSize(tilesetImage.getWidth(), tilesetImage.getHeight());
 		int x_tiles = tilesetImage.getWidth() / TILE_SIZE;
 		int y_tiles = tilesetImage.getHeight() / TILE_SIZE;
