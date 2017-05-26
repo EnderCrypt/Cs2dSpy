@@ -2,6 +2,8 @@ package com.endercrypt.cs2dspy.representation.map;
 
 import java.awt.Image;
 
+import com.endercrypt.cs2dspy.gui.GraphicsObject;
+
 /**
  *	This file is part of Cs2dSpy and was created by Magnus Gunnarsson
  *
@@ -22,15 +24,16 @@ import java.awt.Image;
  */
 public class Tileset
 {
-	private Image[] tiles;
+	private GraphicsObject[] tiles;
 
 	public Tileset(Image[] tiles, int scale)
 	{
 		int size = MasterTileset.TILE_SIZE / scale;
-		this.tiles = new Image[tiles.length];
+		this.tiles = new GraphicsObject[tiles.length];
 		for (int i = 0; i < tiles.length; i++)
 		{
-			this.tiles[i] = tiles[i].getScaledInstance(size, size, Image.SCALE_SMOOTH);
+			Image image = tiles[i].getScaledInstance(size, size, Image.SCALE_SMOOTH);
+			this.tiles[i] = new GraphicsObject(image, "Tile: " + i + " scale: " + scale);
 		}
 	}
 
@@ -41,6 +44,14 @@ public class Tileset
 
 	public Image frame(byte frame)
 	{
-		return tiles[frame + 127];
+		return tiles[frame + 127].getVolatileImage();
+	}
+
+	public void validate()
+	{
+		for (GraphicsObject tile : tiles)
+		{
+			tile.validate();
+		}
 	}
 }

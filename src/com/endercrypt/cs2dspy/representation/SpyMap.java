@@ -79,6 +79,7 @@ public class SpyMap
 	public void draw(Graphics2D g2d, View view, Dimension screenSize)
 	{
 		Tileset zoomedTileset = masterTileset.getZoomTileset(view.getZoom());
+		zoomedTileset.validate();
 
 		Position viewPosition = view.getPosition();
 		viewPosition.x -= (screenSize.width / 2) * view.getZoom();
