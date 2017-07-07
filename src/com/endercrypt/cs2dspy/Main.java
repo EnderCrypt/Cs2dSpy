@@ -82,9 +82,11 @@ public class Main
 		Cs2dSpyUpdateFrequency = settings.key("Cs2d.UpdateFrequency").getInteger();
 		U_FPS = 1000 / 50 * Cs2dSpyUpdateFrequency;
 
-		System.out.println("Starting Cs2d client...");
+		// enable opengl
+		System.setProperty("sun.java2d.opengl", "True");
 
 		// create window
+		System.out.println("Starting Cs2d client...");
 		window = new AwtWindow("Cs2d Spy Client", screenSize, new ApplicationGui());
 
 		// set font
