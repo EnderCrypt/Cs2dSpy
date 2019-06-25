@@ -4,7 +4,7 @@ public download: http://www.unrealsoftware.de/files_show.php?file=17266
 
 Cs2dSpy is a utility software (open source!)
 
-Its made it for Cs2d Server owners, allowing them to view whats going on in server even if they arent in it (dedicated servers)
+This is a software for Cs2d Server owners, allowing them to view whats going on in server even if they arent in it (dedicated servers)
 
 requirements:
 - Cs2d server that runs lua
